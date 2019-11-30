@@ -53,7 +53,7 @@ AUTOSTART: `raat06invitro.prg' recognized as program/p00 file.
 Main CPU: starting at ($FFFC).
 Main CPU: RESET.
 Drive 8: RESET.
-AUTOSTART: Injecting program data at $0801 (size $c683)
+AUTOSTART: Injecting program data at $0801 (size $c361)
 AUTOSTART: Ready
 AUTOSTART: Turning Warp mode off
 AUTOSTART: Starting program.

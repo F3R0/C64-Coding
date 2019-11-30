@@ -15,9 +15,11 @@
 .const musicPlay 	= music+3
 .const color 		= $d800
 
+.const rasterPos0	= $20
 .const rasterPos1	= $ff
 .const rasterPos2	= 216
 .const rasterPos3	= $fa
+.const rasterPos4	= $80
 
 .const brdColor 	= $d020
 .const bgColor 		= $d021
@@ -242,7 +244,6 @@ irq02:
 		.label irq02y = irq02y_p+1
 
 		rti
-
 
 
 irq03:
@@ -532,6 +533,7 @@ scrloop:
 	inx
 	cpx #40
 	bne scrloop
+	
 getchr: 
 	lda text
 	cmp #$ff
@@ -746,6 +748,7 @@ ypos:
 
 
 message:
+/* .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
@@ -754,8 +757,7 @@ message:
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
-.text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
-.byte $ff
+.byte $ff */
 
 
 creditstext:
@@ -773,75 +775,72 @@ colortable3:
         .byte 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
         .byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
         .byte 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
-
-
-
-/* 
-.text "AdaminBiri       "
-.text "AGY              "
-.text "Akermen          "
-.text "Alcofribas       "
-.text "Alpyre           "
-.text "AmonR            "
-.text "Arcane           "
-.text "Ari              "
-.text "Astron           "
-.text "Attilan          "
-.text "Axon             "
-.text "Bager            "
-.text "Beast            "
-.text "Blockmind        "
-.text "Caisson          "
-.text "Cengizermis      "
-.text "codewarrior      "
-.text "Coze             "
-.text "Curt             "
-.text "Datura           "
-.text "doMiNO           "
-.text "Drey             "
-.text "eins             "
-.text "Endo             "
-.text "ExtMode          "
-.text "F3R0             "
-.text "fullgrim         "
-.text "function         "
-.text "Gaddar           "
-.text "Geos             "
-.text "gibraltar        "
-.text "Hades            "
-.text "Hydrogen         "
-.text "Impetigo         "
-.text "i_r_on           "
-.text "İlkerG           "
-.text "ilky             "
-.text "Illcare_Barrelers"
-.text "joker            "
-.text "Madcat           "
-.text "matahari         "
-.text "Memrah           "
-.text "MineCrafter6860  "
-.text "modelist         "
-.text "Nightlord        "
-.text "Norvax           "
-.text "overkill         "
-.text "ozkano           "
-.text "Peacer           "
-.text "Perpetual        "
-.text "Ragnor           "
-.text "Ref              "
-.text "Retromaster      "
-.text "Savagery         "
-.text "Shax             "
-.text "Skate            "
-.text "spritus          "
-.text "SSG              "
-.text "Senol            "
-.text "TTalayman        "
-.text "Vigo             "
-.text "Wisdom           "
-.text "Witchdoktor      "
-.text "Wizardofwar      "
-.text "Wizofwor         "
-.text "Wolfiem          "
-.text "YavuzG           "
-.text "Zer0             " */
+ 
+/* .text @"AdaminBiri       "
+.text @"AGY              "
+.text @"Akermen          "
+.text @"Alcofribas       "
+.text @"Alpyre           "
+.text @"AmonR            "
+.text @"Arcane           "
+.text @"Ari              "
+.text @"Astron           "
+.text @"Attilan          "
+.text @"Axon             "
+.text @"Bager            "
+.text @"Beast            "
+.text @"Blockmind        "
+.text @"Caisson          "
+.text @"Cengizermis      "
+.text @"codewarrior      "
+.text @"Coze             "
+.text @"Curt             "
+.text @"Datura           "
+.text @"doMiNO           "
+.text @"Drey             "
+.text @"eins             "
+.text @"Endo             "
+.text @"ExtMode          "
+.text @"F3R0             "
+.text @"fullgrim         "
+.text @"function         "
+.text @"Gaddar           "
+.text @"Geos             "
+.text @"gibraltar        "
+.text @"Hades            "
+.text @"Hydrogen         "
+.text @"Impetigo         "
+.text @"i_r_on           "
+.text @"İlkerG           "
+.text @"ilky             "
+.text @"Illcare_Barrelers"
+.text @"joker            "
+.text @"Madcat           "
+.text @"matahari         "
+.text @"Memrah           "
+.text @"MineCrafter6860  "
+.text @"modelist         "
+.text @"Nightlord        "
+.text @"Norvax           "
+.text @"overkill         "
+.text @"ozkano           "
+.text @"Peacer           "
+.text @"Perpetual        "
+.text @"Ragnor           "
+.text @"Ref              "
+.text @"Retromaster      "
+.text @"Savagery         "
+.text @"Shax             "
+.text @"Skate            "
+.text @"spritus          "
+.text @"SSG              "
+.text @"Senol            "
+.text @"TTalayman        "
+.text @"Vigo             "
+.text @"Wisdom           "
+.text @"Witchdoktor      "
+.text @"Wizardofwar      "
+.text @"Wizofwor         "
+.text @"Wolfiem          "
+.text @"YavuzG           "
+.text @"Zer0             " */

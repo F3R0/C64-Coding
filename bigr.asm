@@ -68,8 +68,8 @@ initSpritesIntro:
     lda #%00110101		/// no basic or kernal
 	sta $01
 
-      lda #$20
-      sta $d012
+	lda #rasterPos0
+	sta $d012
 
    	lda #<irq00
 	sta $fffe
@@ -78,23 +78,9 @@ initSpritesIntro:
 
     cli
 
-ldx #0
 son:
 
-    lda #$80
-    cmp $d012
-    bne *-3
-
-      txa
-      pha
-      jsr $1003
-      jsr upscroll
-      
-      pla
-      tax
-      inx
-      cpx #255
-      bne son 
+jsr cycletext
 
 jmp son
   
@@ -106,12 +92,24 @@ irq00:
 		stx irq00x
 		sty irq00y
 
-        lsr $d019
+       
  
-jsr colcyc
-jsr updatetxt
+lda #$02
+sta $d020
 
+  jsr $1003
 
+lda #$0e
+sta $d020
+
+                lsr $d019
+		lda #<irq04		/// prepare irq vector
+		sta $fffe
+		lda #>irq04
+		sta $ffff
+
+		lda #rasterPos4 /// set next irq raster position
+		sta $d012
 
      	irq00a_p: lda #$00
 		.label irq00a = irq00a_p+1
@@ -124,16 +122,48 @@ jsr updatetxt
 
 		rti
 
+irq04:
+
+        sta irq04a
+		stx irq04x
+		sty irq04y
+
+lda #$01
+sta $d020
+     
+jsr upscroll
+
+lda #$0e
+sta $d020
+                lsr $d019
+
+		lda #<irq00		/// prepare irq vector
+		sta $fffe
+		lda #>irq00
+		sta $ffff
+
+                lda #rasterPos0	/// set next irq raster position
+		sta $d012
+
+     	irq04a_p: lda #$00
+		.label irq04a = irq04a_p+1
+
+		irq04x_p: ldx #$00
+		.label irq04x = irq04x_p+1
+
+		irq04y_p: ldy #$00
+		.label irq04y = irq04y_p+1
+
+		rti
 
 upscroll:
 
         lda ydelay    //set out a delay for the upscroll
-        cmp #$2			//delayed enough? because upscroll is faster
+        cmp #$3		//delayed enough? because upscroll is faster
         beq ydelayok    //compared to side scroll.
         inc ydelay    //increment delay by 1 byte until 8
         rts
 ydelayok:
-        jsr checktimer
               // are you ready to change the text?
         lda #$00      //reset delay
         sta ydelay
@@ -187,38 +217,28 @@ skipreset: //standard message found, skip reset!
         sta scrread+2
         rts
 
-updatetxt:    
-        ldx creditcount
+
+cycletext:
+        ldx creditscount
         ldy #0
-txtread:
-        lda creditstext,x    //self modifying message ...
+cycloop:lda creditstext,x    
         sta $440e+22*40,y
         inx
         iny
         cmp #$20
-        bne txtread
-        stx counter
-        
-rts
-
-checktimer:
-lda changetimer
-cmp #2
-bne updatetxt
-
-inc creditcount
-
-rts
+        bne cycloop
+        stx creditscount
 
 waitafewsec:
-    ldy #0
-    ldx #0
-    waitloop:	
-    dex
-    bne waitloop
-    dey
-    bne waitloop
-    rts
+    ldx #2
+waitloop:
+        lda $d012
+        cmp #$80
+        bne waitloop
+        dex
+        bne waitloop
+        rts
+
 
 colcyc:
             lda colortable3
@@ -232,14 +252,9 @@ coloop:     lda colortable3+1,x
             bne coloop
             rts
 
-counter
 
-creditcount:
+creditscount:
 .byte 0
-
-changetimer:
-.byte 0
-
 
 bigrend:
  
