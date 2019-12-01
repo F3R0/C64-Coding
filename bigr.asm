@@ -5,11 +5,11 @@ initSpritesIntro:
 	{	
 	lda #337+i
 	sta sprtPointer+i
-	lda #$6
+	lda #$1
 	sta $d027+i
 	}
 
-	lda	#%00111111
+	lda	#%11111111
 	sta $d015
 
 	lda #%00000000
@@ -78,9 +78,13 @@ initSpritesIntro:
 
     cli
 
+
+
 son:
 
-jsr creditext
+  
+jsr cleartoptxt
+jsr showcredits
 
 jmp son
   
@@ -91,17 +95,11 @@ irq00:
         sta irq00a
 		stx irq00x
 		sty irq00y
-
-       
- 
 lda #$02
 sta $d020
-
   jsr $1003
-
-lda #$0e
+lda #$06
 sta $d020
-
                 lsr $d019
 		lda #<irq04		/// prepare irq vector
 		sta $fffe
@@ -128,13 +126,12 @@ irq04:
 		stx irq04x
 		sty irq04y
 
-lda #$01
-sta $d020
+
+
+
      
 jsr upscroll
 
-lda #$0e
-sta $d020
                 lsr $d019
 
 		lda #<irq00		/// prepare irq vector
@@ -184,7 +181,7 @@ doscroll:
         ldx #$00
 puttxt:
 		
-        .for(var i=5; i<20; i++) {
+        .for(var i=4; i<19; i++) {
         lda $440e+i*40,x //take 40 chars from last row
         sta $440e+(i-1)*40,x  //position to row above ...
         }
@@ -196,7 +193,7 @@ puttxt:
                 ldy #0
 scrread:
         lda message,x    //self modifying message ...
-        sta $440e+19*40,y
+        sta $440e+18*40,y
         inx
         iny
         cpy #$b
@@ -204,27 +201,28 @@ scrread:
         stx rtextcount
         rts
 
-creditext:
+showcredits:
         ldy #0
         ldx #0
 cycletext:
-        lda creditstxt,x    //self modifying message ...
+        lda creditstxt,x
         sta $440a+20*40,y
-                cmp #$00 //@ spotted?
-                bne skpcycrst
-                lda #<creditstxt //reset message now @ is spotted.
+        iny
+                cmp #$00
+                bne dontreset
+                lda #<creditstxt
                 sta cycletext+1
                 lda #>creditstxt
                 sta cycletext+2
-                jmp cycletext
+                jmp showcredits
+                
 
-skpcycrst: //standard message found, skip reset!
+dontreset:
         inx
-        iny
         cpx #20
-        bne cycletext        
-        lda cycletext+1 //move on to the next row of upscroll
-        clc                        //text data. stored in message
+        bne cycletext
+        lda cycletext+1
+        clc                       
         adc #20
         sta cycletext+1
         lda cycletext+2
@@ -232,7 +230,7 @@ skpcycrst: //standard message found, skip reset!
         sta cycletext+2
 
 waitafewsec:
-        ldy #20
+        ldy #100
 waitloop:
         lda $d012
         cmp #$80
@@ -254,11 +252,26 @@ coloop:     lda colortable3+1,x
             bne coloop
             rts
 
+cleartoptxt:
+ldx #0
+lda #06
+clrtxtloop:
+sta $d800,x
+inx
+cpx #160
+bne clrtxtloop
+rts
+
+
 rtextcount:
 .byte 0
 
-namescount:
+creditscount:
 .byte 0
 
 bigrend:
  
+
+
+
+

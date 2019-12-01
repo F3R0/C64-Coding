@@ -15,11 +15,11 @@
 .const musicPlay 	= music+3
 .const color 		= $d800
 
-.const rasterPos0	= $20
+.const rasterPos0	= $0
 .const rasterPos1	= $ff
 .const rasterPos2	= 216
 .const rasterPos3	= $fa
-.const rasterPos4	= $80
+.const rasterPos4	= $30
 
 .const brdColor 	= $d020
 .const bgColor 		= $d021
@@ -666,6 +666,16 @@ clearloop:   sta $4400,x
 		.byte $01,$07,$03,$03,$0c,$0c,$0b,$0b
 		.byte $0b,$0b,$0b,$0b,$0b,$0b,$0b,$0b
 
+colortable3:
+        .byte 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
+        .byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+        .byte 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
+        .byte 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
+        .byte 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
+        .byte 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
+        .byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
+        .byte 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
+
 	framecounterx:
 		.byte 0
 
@@ -689,8 +699,6 @@ textno:
 
 textcount:	
 	.byte 0
-
-*=$c000
 
 text:
 	.text "     $% retrojen presents $%     raat#06: 'the four horsemen of the apocalypse'     "
@@ -756,14 +764,11 @@ message:
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
-.text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen asdasdasd"
+.text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen asdasdas"
 .byte 0
 
-
+*=$c000
 creditstxt:
-//.text @"AdaminBiri\$20AGY\$20Akermen\$20Alcofribas\$20Alpyre\$20AmonR\$20Arcane\$20Ari\$20Astron\$20Attilan\$20Axon\$20Bager\$20Beast\$20Blockmind\$20Caisson\$20Cengizermis\$20codewarrior\$20Coze\$20Curt\$20Datura\$20doMiNO\$20Drey\$20eins\$20Endo\$20ExtMode\$20F3R0\$20fullgrim\$20function\$20Gaddar\$20Geos\$20gibraltar\$20Hades\$20Hydrogen\$20Impetigo\$20i_r_on\$20İlkerG\$20ilky\$20Illcare_Barrelers\$20joker\$20Madcat\$20matahari\$20Memrah\$20MineCrafter6860\$20modelist\$20Nightlord\$20Norvax\$20overkill\$20ozkano\$20Peacer\$20Perpetual\$20Ragnor\$20Ref\$20Retromaster\$20Savagery\$20Shax\$20Skate\$20spritus\$20SSG\$20Senol\$20TTalayman\$20Vigo\$20Wisdom\$20Witchdoktor\$20Wizardofwar\$20Wizofwor\$20Wolfiem\$20YavuzG\$20Zer0"
-//.text @"\$23AdaminBiri\$20\$23AGY\$20\$23Akermen\$20\$23Alcofribas\$20\$23Alpyre\$20\$23AmonR\$20\$23Arcane\$20\$23Ari\$20\$23Astron\$20\$23Attilan\$20\$23Axon\$20\$23Bager\$20\$23Beast\$20\$23Blockmind\$20\$23Caisson\$20\$23Cengizermis\$20\$23codewarrior\$20\$23Coze\$20\$23Curt\$20\$23Datura\$20\$23doMiNO\$20\$23Drey\$20\$23eins\$20\$23Endo\$20\$23ExtMode\$20\$23F3R0\$20\$23fullgrim\$20\$23function\$20\$23Gaddar\$20\$23Geos\$20\$23gibraltar\$20\$23Hades\$20\$23Hydrogen\$20\$23Impetigo\$20\$23i_r_on\$20\$23lkerG\$20\$23ilky\$20\$23Illcare_Barrelers\$20\$23joker\$20\$23Madcat\$20\$23matahari\$20\$23Memrah\$20\$23MineCrafter6860\$20\$23modelist\$20\$23Nightlord\$20\$23Norvax\$20\$23overkill\$20\$23ozkano\$20\$23Peacer\$20\$23Perpetual\$20\$23Ragnor\$20\$23Ref\$20\$23Retromaster\$20\$23Savagery\$20\$23Shax\$20\$23Skate\$20\$23spritus\$20\$23SSG\$20\$23Senol\$20\$23TTalayman\$20\$23Vigo\$20\$23Wisdom\$20\$23Witchdoktor\$20\$23Wizardofwar\$20\$23Wizofwor\$20\$23Wolfiem\$20\$23YavuzG\$20\$23Zer0"
-//credits1:
 .text @"-====AdaminBiri====-"
 .text @"-=======AGY========-"
 .text @"-=====Akermen======-"
@@ -776,7 +781,6 @@ creditstxt:
 .text @"-=====Attilan======-"
 .text @"-=======Axon=======-"
 .text @"-=======Bager======-"
-//credits2:
 .text @"-=======Beast======-"
 .text @"-=====Blockmind====-"
 .text @"-======Caisson=====-"
@@ -789,7 +793,6 @@ creditstxt:
 .text @"-=======Drey=======-"
 .text @"-=======eins=======-"
 .text @"-=======Endo=======-"
-//credits3:
 .text @"-======ExtMode=====-"
 .text @"-=======F3R0=======-"
 .text @"-=====fullgrim=====-"
@@ -800,9 +803,8 @@ creditstxt:
 .text @"-=======Hades======-"
 .text @"-=====Hydrogen=====-"
 .text @"-=====Impetigo=====-"
-.text @"-======i_r_on======-"
+.text @"-======i.r.on======-"
 .text @"-======IlkerG======-"
-//credits4:
 .text @"-=======ilky=======-"
 .text @"-=IllcareBarrelers=-"
 .text @"-=======joker======-"
@@ -815,7 +817,6 @@ creditstxt:
 .text @"-======Norvax======-"
 .text @"-=====overkill=====-"
 .text @"-======ozkano======-"
-//credits5:
 .text @"-======Peacer======-"
 .text @"-=====Perpetual====-"
 .text @"-======Ragnor======-"
@@ -828,7 +829,6 @@ creditstxt:
 .text @"-========SSG=======-"
 .text @"-=======Senol======-"
 .text @"-=====TTalayman====-"
-//credits6:
 .text @"-=======Vigo=======-"
 .text @"-======Wisdom======-"
 .text @"-====Witchdoktor===-"
@@ -836,15 +836,7 @@ creditstxt:
 .text @"-======Wizofwor====-"
 .text @"-======Wolfiem=====-"
 .text @"-======YavuzG======-"
-.text @"-=======Zer0=======- "
-
-
-colortable3:
-        .byte 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
-        .byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
-        .byte 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
-        .byte 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
-        .byte 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
-        .byte 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
-        .byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
-        .byte 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
+.text @"-=======Zer0=======-"
+.text @"\$00"
+.byte 0
+.align $ff
