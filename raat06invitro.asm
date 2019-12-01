@@ -68,14 +68,14 @@
 		lda #%00010110	//Bitmap: $6000, Screen: $4400
 		sta $d018
 
-//#import "type.asm"
-/* 
+/* #import "type.asm"
+
 jsr loading
 jsr loading
 jsr loading
 jsr loading
-jsr loading
- */
+jsr loading */
+
 		lda #$06
 		sta brdColor
 		lda #$06
@@ -667,14 +667,21 @@ clearloop:   sta $4400,x
 		.byte $0b,$0b,$0b,$0b,$0b,$0b,$0b,$0b
 
 colortable3:
-        .byte 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
-        .byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
-        .byte 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
-        .byte 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
-        .byte 7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7
-        .byte 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8
-        .byte 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
-        .byte 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
+        
+        .byte 2,2,2,2
+        .byte 8,8,8,8
+		.byte $a,$a,$a,$a
+        .byte 7,7,7,7
+        .byte 7,7,7,7
+		.byte $a,$a,$a,$a
+        .byte 8,8,8,8
+        .byte 2,2,2,2
+		
+
+      
+
+
+       
 
 	framecounterx:
 		.byte 0

@@ -99,6 +99,8 @@ irq00:
 		stx irq00x
 		sty irq00y
 
+
+
 		ldx #$04
 	rl1: dex
 		bne rl1
@@ -147,7 +149,7 @@ irq04:
 		sty irq04y
 
 
-
+jsr colcyc
 
      
 jsr upscroll
@@ -250,7 +252,7 @@ dontreset:
         sta cycletext+2
 
 waitafewsec:
-        ldy #100
+        ldy #250
 waitloop:
         lda $d012
         cmp #$80
@@ -263,15 +265,18 @@ rts
 
 colcyc:
             lda colortable3
-            sta colortable3+128
+            sta colortable3+20
             ldx #$0
 coloop:     lda colortable3+1,x 
-            sta colortable3,x      
-            sta $d80e+20*40,x
+            sta colortable3,x  
+
+            sta $d80a+20*40,x
+            
             inx
-            cpx #128
+            cpx #20
             bne coloop
-            rts
+
+            rts  
 
 cleartoptxt:
 ldx #0
