@@ -15,11 +15,11 @@
 .const musicPlay 	= music+3
 .const color 		= $d800
 
-.const rasterPos0	= $0
+.const rasterPos0	= 250
 .const rasterPos1	= $ff
 .const rasterPos2	= 216
 .const rasterPos3	= $fa
-.const rasterPos4	= $30
+.const rasterPos4	= 0
 
 .const brdColor 	= $d020
 .const bgColor 		= $d021
@@ -76,10 +76,15 @@ jsr loading
 jsr loading
 jsr loading
  */
-		lda #$0e
+		lda #$06
 		sta brdColor
 		lda #$06
 		sta bgColor
+
+	lda #$0
+	sta $0fff	
+	sta $3fff	/// Clear ghost byte
+	sta $7fff
 
 jsr clearscreen
 		jsr music	/// Initialize music @ $1000
@@ -129,11 +134,6 @@ jsr clearscreen
 	sta $fffe
 	lda #>irq01
 	sta $ffff
-
-	lda #$0
-	sta $0fff	
-	sta $3fff	/// Clear ghost byte
-	sta $7fff
 
 	cli			/// re-enable interrupts
 
@@ -836,7 +836,7 @@ creditstxt:
 .text @"-======Wizofwor====-"
 .text @"-======Wolfiem=====-"
 .text @"-======YavuzG======-"
-.text @"-=======Zer0=======-"
+.text @"-=======Zer0=======-" 
 .text @"\$00"
 .byte 0
 .align $ff

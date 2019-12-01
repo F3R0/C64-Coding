@@ -5,11 +5,11 @@ initSpritesIntro:
 	{	
 	lda #337+i
 	sta sprtPointer+i
-	lda #$1
+	lda #$6
 	sta $d027+i
 	}
 
-	lda	#%11111111
+	lda #%11111111
 	sta $d015
 
 	lda #%00000000
@@ -19,20 +19,22 @@ initSpritesIntro:
 	sta $d01c	
 
     lda #$89
-	sta $d00c
-	sta $d000
+        sta $d000
     sta $d004
     sta $d008
-	adc #47
-	sta $d00e
+        adc #47
     sta $d002
     sta $d006
     sta $d00a
 
+        lda #23
+        sta $d00c
+        adc #24
+        sta $d00e
 
-	lda #41
+	lda #248
 	sta $d00d
-    sta $d00f
+        sta $d00f
 
     lda #82
     sta $d001
@@ -44,9 +46,7 @@ initSpritesIntro:
     sta $d009
     sta $d00b
 
-
-
-    lda #%11111111
+        lda #%00111111
 	sta $d01d
 	sta $d017
 
@@ -65,7 +65,7 @@ initSpritesIntro:
       and #$7f
       sta $d011
       
-    lda #%00110101		/// no basic or kernal
+        lda #%00110101		/// no basic or kernal
 	sta $01
 
 	lda #rasterPos0
@@ -82,9 +82,12 @@ initSpritesIntro:
 
 son:
 
-  
+          lda #1
+	sta $d02d
+        sta $d02e
 jsr cleartoptxt
 jsr showcredits
+jsr counttoleave
 
 jmp son
   
@@ -95,11 +98,28 @@ irq00:
         sta irq00a
 		stx irq00x
 		sty irq00y
-lda #$02
-sta $d020
+
+		ldx #$04
+	rl1: dex
+		bne rl1
+
+		lda #%00010011 // Text Mode // 24 Rows
+		sta $d011
+
+		ldx #$0e
+	rl2: dex
+		bne rl2
+
+        	lda #%11001000 // 40 Columns // Multicolor
+		sta $d016
+
+	 	lda #%00011011 // Text Mode // 25 Rows
+		sta $d011
+
+
   jsr $1003
-lda #$06
-sta $d020
+
+
                 lsr $d019
 		lda #<irq04		/// prepare irq vector
 		sta $fffe
@@ -237,6 +257,7 @@ waitloop:
         bne waitloop
         dey
         bne waitloop
+        inc creditscount
 
 rts
 
@@ -262,6 +283,11 @@ cpx #160
 bne clrtxtloop
 rts
 
+counttoleave:
+lda creditscount
+cmp #68
+beq bigrend
+rts
 
 rtextcount:
 .byte 0
