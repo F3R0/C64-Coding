@@ -5,7 +5,7 @@ initSpritesIntro:
 	{	
 	lda #337+i
 	sta sprtPointer+i
-	lda #$6
+	lda #$0
 	sta $d027+i
 	}
 
@@ -27,12 +27,21 @@ initSpritesIntro:
     sta $d006
     sta $d00a
 
-        lda #23
+/*         lda #23
         sta $d00c
         adc #24
         sta $d00e
 
 	lda #248
+	sta $d00d
+        sta $d00f */
+
+        lda #128
+        sta $d00c
+        adc #24
+        sta $d00e
+
+	lda #$ff
 	sta $d00d
         sta $d00f
 
@@ -49,6 +58,10 @@ initSpritesIntro:
         lda #%00111111
 	sta $d01d
 	sta $d017
+
+                lda #$01
+	        sta $d02d       ///retrojen logo color
+                sta $d02e
 
   RasterIRQHazirla:
       sei
@@ -77,17 +90,25 @@ initSpritesIntro:
 	sta $ffff
 
     cli
-
-
+jsr cleartoptxt
+jsr paintlogo
 
 son:
 
-          lda #1
-	sta $d02d
-        sta $d02e
-jsr cleartoptxt
 jsr showcredits
 jsr counttoleave
+jsr showcredits
+jsr counttoleave
+jsr showcredits
+jsr counttoleave
+jsr showcredits
+jsr counttoleave
+jsr showcredits
+jsr counttoleave
+jsr showcredits
+jsr counttoleave
+
+jsr mirrorlogo
 
 jmp son
   
@@ -118,8 +139,7 @@ irq00:
 	 	lda #%00011011 // Text Mode // 25 Rows
 		sta $d011
 
-
-  jsr $1003
+jsr $1003
 
 
                 lsr $d019
@@ -150,9 +170,8 @@ irq04:
 
 
 jsr colcyc
-
-     
 jsr upscroll
+
 
                 lsr $d019
 
@@ -201,11 +220,10 @@ doscroll:
 //move screen data upwards, one row after another
 	
         ldx #$00
-puttxt:
-		
+puttxt:	
         .for(var i=4; i<19; i++) {
         lda $440e+i*40,x //take 40 chars from last row
-        sta $440e+(i-1)*40,x  //position to row above ...
+        sta $440e+(i-1)*40,x
         }
                 inx
                 cpx #$b
@@ -250,19 +268,18 @@ dontreset:
         lda cycletext+2
         adc #$00
         sta cycletext+2
+        inc creditscount
 
 waitafewsec:
-        ldy #250
+        ldy #210      //default 250
 waitloop:
         lda $d012
         cmp #$80
         bne waitloop
         dey
         bne waitloop
-        inc creditscount
-
-rts
-
+        
+        
 colcyc:
             lda colortable3
             sta colortable3+20
@@ -278,9 +295,56 @@ coloop:     lda colortable3+1,x
 
             rts  
 
+waitglobal:
+        ldy #250     
+waitglbloop:
+        lda $d012
+        cmp #$80
+        bne waitglbloop
+        dey
+        bne waitglbloop
+        rts
+
+
+paintlogo:
+        ldx #0
+        ldy #0
+        .for(var i=4; i<19; i++) {
+ploop:  lda colortable4,y
+        sta $d80e+i*40,x
+        inx
+        cpx #$b
+        bne ploop
+        iny
+        }
+rts
+
+
+mirrorlogo:
+    lda toggle
+    eor #%01000001
+    sta toggle
+    cmp #%11111111
+    bne mirror
+
+.for (var i = 0; i <= 5; i++)  // don't forget to change!!!!
+{	
+lda #345+i
+sta sprtPointer+i
+}
+rts
+
+mirror:
+.for (var i = 0; i <= 5; i++)  // don't forget to change!!!!
+{	
+lda #337+i
+sta sprtPointer+i
+}
+rts
+
 cleartoptxt:
 ldx #0
-lda #06
+lda #0
 clrtxtloop:
 sta $d800,x
 inx
@@ -290,9 +354,36 @@ rts
 
 counttoleave:
 lda creditscount
-cmp #68
+cmp #70
 beq bigrend
 rts
+
+spritedancey:	ldx framecountery2
+		lda cosx,x
+		adc #220
+		sta $d00d
+                sta $d00f
+		inx
+	        inc framecountery2
+
+                
+                
+rts
+
+spritedancex:	ldx framecountery2
+		lda sinx,x
+		adc #145
+		sta $d00c
+                adc #24
+                sta $d00e
+		inx
+	        inc framecountery2
+            
+rts
+
+
+toggle:
+.byte $ff
 
 rtextcount:
 .byte 0
@@ -300,8 +391,72 @@ rtextcount:
 creditscount:
 .byte 0
 
+framecountery2:
+.byte 0
+
 bigrend:
+
+lda #$0
+sta $d02d       ///retrojen logo color
+sta $d02e
+jsr showcredits
+
+ldx #0
+waittogo:
+lda $d012
+cmp #$80
+bne waittogo
+
+lda #0
+clearscrloop:
+sta $d80e+4*40,x
+inx
+cpx #255
+bne waittogo
+
+bigrend2:
  
+ldx #0
+waittogo2:
+lda $d012
+cmp #$80
+bne waittogo2
+
+lda #0
+clearscrloop2:
+sta $d90d+4*40,x
+inx
+cpx #255
+bne waittogo2
+
+bigrend3:
+ldx #0
+waittogo3:
+lda $d012
+cmp #$80
+bne waittogo3
+
+lda #0
+clearscrloop3:
+sta $da0c+4*40,x
+inx
+cpx #160
+bne waittogo3
+
+jsr showcredits
+jsr waitglobal
+jsr showcredits
+jsr waitglobal
+
+finale:
+
+
+
+
+
+
+
+
 
 
 

@@ -68,17 +68,17 @@
 		lda #%00010110	//Bitmap: $6000, Screen: $4400
 		sta $d018
 
-/* #import "type.asm"
+#import "type.asm"
 
 jsr loading
 jsr loading
 jsr loading
 jsr loading
-jsr loading */
+jsr loading
 
-		lda #$06
+		lda #$00
 		sta brdColor
-		lda #$06
+		lda #$00
 		sta bgColor
 
 	lda #$0
@@ -628,6 +628,43 @@ clearloop:   sta $4400,x
 		.byte 5,6,7,7,7,7,7,7,6,5,4,3,2,1,1,1
 		.byte 1,1,2,3,4,5,6,6,7,7,7,7,7,6,5,4
 
+	sinx:
+.byte 10,10,9,9,8,8,8,7,7,6,6,6,6,5,5,5
+.byte 5,5,4,4,4,4,4,4,4,5,5,5,5,5,5,6
+.byte 6,6,7,7,7,8,8,9,9,9,10,10,11,11,11,12
+.byte 12,13,13,13,14,14,14,15,15,15,15,15,15,16,16,16
+.byte 16,16,16,16,15,15,15,15,15,14,14,14,14,13,13,12
+.byte 12,12,11,11,10,10,10,9,9,8,8,8,7,7,6,6
+.byte 6,6,5,5,5,5,5,4,4,4,4,4,4,4,5,5
+.byte 5,5,5,5,6,6,6,7,7,7,8,8,9,9,9,10
+.byte 10,11,11,11,12,12,13,13,13,14,14,14,15,15,15,15
+.byte 15,15,16,16,16,16,16,16,16,15,15,15,15,15,14,14
+.byte 14,14,13,13,12,12,12,11,11,10,10,10,9,9,8,8
+.byte 8,7,7,6,6,6,6,5,5,5,5,5,4,4,4,4
+.byte 4,4,4,5,5,5,5,5,5,6,6,6,7,7,7,8
+.byte 8,9,9,9,10,10,11,11,11,12,12,13,13,13,14,14
+.byte 14,15,15,15,15,15,15,16,16,16,16,16,16,16,15,15
+.byte 15,15,15,14,14,14,14,13,13,12,12,12,11,11,10,10
+
+cosx:
+.byte 10,10,9,9,8,8,8,7,7,7,7,7,7,7,7,7
+.byte 7,7,7,8,8,8,9,9,9,10,10,11,11,11,12,12
+.byte 12,13,13,13,13,13,13,13,13,13,13,13,13,12,12,12
+.byte 11,11,10,10,10,9,9,8,8,8,7,7,7,7,7,7
+.byte 7,7,7,7,7,7,8,8,8,9,9,9,10,10,11,11
+.byte 11,12,12,12,13,13,13,13,13,13,13,13,13,13,13,13
+.byte 12,12,12,11,11,10,10,10,9,9,8,8,8,7,7,7
+.byte 7,7,7,7,7,7,7,7,7,8,8,8,9,9,9,10
+.byte 10,11,11,11,12,12,12,13,13,13,13,13,13,13,13,13
+.byte 13,13,13,12,12,12,11,11,10,10,10,9,9,8,8,8
+.byte 7,7,7,7,7,7,7,7,7,7,7,7,8,8,8,9
+.byte 9,9,10,10,11,11,11,12,12,12,13,13,13,13,13,13
+.byte 13,13,13,13,13,12,12,12,12,11,11,10,10,10,9,9
+.byte 8,8,8,7,7,7,7,7,7,7,7,7,7,7,7,8
+.byte 8,8,9,9,9,10,10,11,11,11,12,12,12,13,13,13
+.byte 13,13,13,13,13,13,13,13,12,12,12,12,11,11,10,10
+
+
 	colortable:
 
 		.byte 1,1,1,1,1,1,1,1,1
@@ -668,7 +705,7 @@ clearloop:   sta $4400,x
 
 colortable3:
         
-        .byte 2,2,2,2
+		.byte 2,2,2,2
         .byte 8,8,8,8
 		.byte $a,$a,$a,$a
         .byte 7,7,7,7
@@ -676,11 +713,40 @@ colortable3:
 		.byte $a,$a,$a,$a
         .byte 8,8,8,8
         .byte 2,2,2,2
-		
 
       
+colortable3end:
+               
 
+colortable4:  
+		.byte $b,$b
+		.byte $c,$c
+		.byte $f,$f,$f
+		.byte 1,1
+		.byte $f,$f,$f
+		.byte $c,$c
+		.byte $b,$b
 
+logocolortab:
+		.byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+		.byte $f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f
+		.byte $c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c
+		.byte $b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b
+		.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+
+/* 
+		.byte 6,6
+		.byte $e,$e
+		.byte 3,3,3
+		.byte 1
+		.byte 1
+		.byte 1
+		.byte 3,3,3
+		.byte $e,$e
+		.byte 6,6
+		.byte 6,6 */
+
+colortable4end:
        
 
 	framecounterx:
@@ -763,6 +829,7 @@ ypos:
 
 
 message:
+
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
@@ -772,10 +839,12 @@ message:
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen asdasdas"
-.byte 0
+
 
 *=$c000
 creditstxt:
+.text @"  YOU ARE INVITED!  "
+.text @"  YOU ARE INVITED!  "
 .text @"-====AdaminBiri====-"
 .text @"-=======AGY========-"
 .text @"-=====Akermen======-"
@@ -843,7 +912,10 @@ creditstxt:
 .text @"-======Wizofwor====-"
 .text @"-======Wolfiem=====-"
 .text @"-======YavuzG======-"
-.text @"-=======Zer0=======-" 
+.text @"-=======Zer0=======-"
+.text @"                    "
+.text @"   ARE YOU READY?   "
+.text @"HERE COMES THE SOLO!"
 .text @"\$00"
 .byte 0
 .align $ff
