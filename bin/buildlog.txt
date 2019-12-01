@@ -8,7 +8,7 @@ Memory Map
 ----------
 Default-segment:
   $0801-$080c Basic
-  $080d-$0d95 Code
+  $080d-$0d99 Code
   $1000-$203a Music
   $4000-$43ff Character Set
   $4900-$4ce7 Bitmap Screen
@@ -17,6 +17,6 @@ Default-segment:
   $5800-$5ad7 CharSetMixed
   $6000-$7f3f Bitmap
   $9200-$9433 Datablocks
-  $c000-$cb61 Unnamed
+  $c000-$d1c8 Unnamed
 
 Writing Symbol file: raat06invitro.sym

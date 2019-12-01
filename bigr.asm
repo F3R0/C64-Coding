@@ -80,7 +80,7 @@ initSpritesIntro:
 
 son:
 
-jsr cycletext
+jsr creditext
 
 jmp son
   
@@ -192,53 +192,55 @@ puttxt:
                 cpx #$b
                 bne puttxt
 
-                ldx #$00
+                ldx rtextcount
+                ldy #0
 scrread:
         lda message,x    //self modifying message ...
-        sta $440e+19*40,x
-                cmp #$00 //@ spotted?
-                bne skipreset
-                lda #<message //reset message now @ is spotted.
-                sta scrread+1
-                lda #>message
-                sta scrread+2
-                jmp scrread
-
-skipreset: //standard message found, skip reset!
-        inx
-        cpx #$b //read 40 chars per row
-        bne scrread        
-        lda scrread+1 //move on to the next row of upscroll
-        clc                        //text data. stored in message
-        adc #$b
-        sta scrread+1
-        lda scrread+2
-        adc #$00
-        sta scrread+2
-        rts
-
-
-cycletext:
-        ldx creditscount
-        ldy #0
-cycloop:lda creditstext,x    
-        sta $440e+22*40,y
+        sta $440e+19*40,y
         inx
         iny
-        cmp #$20
-        bne cycloop
-        stx creditscount
+        cpy #$b
+        bne scrread
+        stx rtextcount
+        rts
+
+creditext:
+        ldy #0
+        ldx #0
+cycletext:
+        lda creditstxt,x    //self modifying message ...
+        sta $440a+20*40,y
+                cmp #$00 //@ spotted?
+                bne skpcycrst
+                lda #<creditstxt //reset message now @ is spotted.
+                sta cycletext+1
+                lda #>creditstxt
+                sta cycletext+2
+                jmp cycletext
+
+skpcycrst: //standard message found, skip reset!
+        inx
+        iny
+        cpx #20
+        bne cycletext        
+        lda cycletext+1 //move on to the next row of upscroll
+        clc                        //text data. stored in message
+        adc #20
+        sta cycletext+1
+        lda cycletext+2
+        adc #$00
+        sta cycletext+2
 
 waitafewsec:
-    ldx #2
+        ldy #20
 waitloop:
         lda $d012
         cmp #$80
         bne waitloop
-        dex
+        dey
         bne waitloop
-        rts
 
+rts
 
 colcyc:
             lda colortable3
@@ -252,8 +254,10 @@ coloop:     lda colortable3+1,x
             bne coloop
             rts
 
+rtextcount:
+.byte 0
 
-creditscount:
+namescount:
 .byte 0
 
 bigrend:

@@ -53,12 +53,8 @@ AUTOSTART: `raat06invitro.prg' recognized as program/p00 file.
 Main CPU: starting at ($FFFC).
 Main CPU: RESET.
 Drive 8: RESET.
-AUTOSTART: Injecting program data at $0801 (size $c361)
+AUTOSTART: Injecting program data at $0801 (size $c9c8)
 AUTOSTART: Ready
 AUTOSTART: Turning Warp mode off
 AUTOSTART: Starting program.
 AUTOSTART: Done.
-Writing configuration file `C:\Users\Fero\AppData\Roaming\vice\3.2\vice.ini'.
-
-Exiting...
-Sound: Closing device `dx'
