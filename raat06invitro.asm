@@ -24,7 +24,7 @@
 .const brdColor 	= $d020
 .const bgColor 		= $d021
 
-.const Start 		= $080d
+.const Start 		= $c000
 
 .label firstrow = screen + (22 * 40)
 .label secondrow = screen + (23 * 40)
@@ -74,7 +74,7 @@ jsr loading
 jsr loading
 jsr loading
 jsr loading
-jsr loading
+jsr loading 
 
 		lda #$00
 		sta brdColor
@@ -87,7 +87,8 @@ jsr loading
 	sta $7fff
 
 jsr clearscreen
-		jsr music	/// Initialize music @ $1000
+jsr music	/// Initialize music @ $1000
+
 
 #import "bigr.asm"
 		
@@ -160,9 +161,6 @@ irq01:
     	sta irq01a
 		stx irq01x
 		sty irq01y
-
-
-
 
 		lda #%00111000		//25 Rows
 		sta $d011
@@ -841,7 +839,7 @@ message:
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen asdasdas"
 
 
-*=$c000
+//*=$c000
 creditstxt:
 .text @"  YOU ARE INVITED!  "
 .text @"  YOU ARE INVITED!  "

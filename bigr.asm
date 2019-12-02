@@ -1,6 +1,4 @@
-
 initSpritesIntro:
-
 	.for (var i = 0; i <= 7; i++)  // don't forget to change!!!!
 	{	
 	lda #337+i
@@ -19,7 +17,7 @@ initSpritesIntro:
 	sta $d01c	
 
     lda #$89
-        sta $d000
+sta $d000
     sta $d004
     sta $d008
         adc #47
@@ -27,19 +25,10 @@ initSpritesIntro:
     sta $d006
     sta $d00a
 
-/*         lda #23
+        lda #158
         sta $d00c
         adc #24
-        sta $d00e
-
-	lda #248
-	sta $d00d
-        sta $d00f */
-
-        lda #128
-        sta $d00c
-        adc #24
-        sta $d00e
+        sta $d00e               /// 6-7 x,y coords
 
 	lda #$ff
 	sta $d00d
@@ -112,8 +101,6 @@ jsr mirrorlogo
 
 jmp son
   
-
-
 irq00:
 
         sta irq00a
@@ -358,30 +345,6 @@ cmp #70
 beq bigrend
 rts
 
-spritedancey:	ldx framecountery2
-		lda cosx,x
-		adc #220
-		sta $d00d
-                sta $d00f
-		inx
-	        inc framecountery2
-
-                
-                
-rts
-
-spritedancex:	ldx framecountery2
-		lda sinx,x
-		adc #145
-		sta $d00c
-                adc #24
-                sta $d00e
-		inx
-	        inc framecountery2
-            
-rts
-
-
 toggle:
 .byte $ff
 
@@ -391,11 +354,7 @@ rtextcount:
 creditscount:
 .byte 0
 
-framecountery2:
-.byte 0
-
 bigrend:
-
 lda #$0
 sta $d02d       ///retrojen logo color
 sta $d02e
@@ -413,8 +372,6 @@ sta $d80e+4*40,x
 inx
 cpx #255
 bne waittogo
-
-bigrend2:
  
 ldx #0
 waittogo2:
@@ -429,7 +386,6 @@ inx
 cpx #255
 bne waittogo2
 
-bigrend3:
 ldx #0
 waittogo3:
 lda $d012
@@ -447,17 +403,3 @@ jsr showcredits
 jsr waitglobal
 jsr showcredits
 jsr waitglobal
-
-finale:
-
-
-
-
-
-
-
-
-
-
-
-
