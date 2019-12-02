@@ -52,7 +52,11 @@ sta $d000
 	        sta $d02d       ///retrojen logo color
                 sta $d02e
 
-  RasterIRQHazirla:
+
+///-----------------------------------------------------------///
+///            	Prepare Raster IRQs          		      ///
+///-----------------------------------------------------------///
+
       sei
       
       lda #$7f
@@ -83,20 +87,24 @@ jsr cleartoptxt
 jsr paintlogo
 
 son:
+//jmp skipbigr                            ///SKIP THIS PART
 
 jsr showcredits
 jsr counttoleave
 jsr showcredits
 jsr counttoleave
-jsr showcredits
-jsr counttoleave
-jsr showcredits
-jsr counttoleave
-jsr showcredits
-jsr counttoleave
-jsr showcredits
-jsr counttoleave
+jsr mirrorlogo
 
+jsr showcredits
+jsr counttoleave
+jsr showcredits
+jsr counttoleave
+jsr mirrorlogo
+
+jsr showcredits
+jsr counttoleave
+jsr showcredits
+jsr counttoleave
 jsr mirrorlogo
 
 jmp son
@@ -258,7 +266,7 @@ dontreset:
         inc creditscount
 
 waitafewsec:
-        ldy #210      //default 250
+        ldy #210     //default 210
 waitloop:
         lda $d012
         cmp #$80
@@ -281,16 +289,6 @@ coloop:     lda colortable3+1,x
             bne coloop
 
             rts  
-
-waitglobal:
-        ldy #250     
-waitglbloop:
-        lda $d012
-        cmp #$80
-        bne waitglbloop
-        dey
-        bne waitglbloop
-        rts
 
 
 paintlogo:
@@ -354,6 +352,11 @@ rtextcount:
 creditscount:
 .byte 0
 
+ydelay: 
+.byte 0
+ypos: 
+.byte $17 //always init with $17 for scroller
+
 bigrend:
 lda #$0
 sta $d02d       ///retrojen logo color
@@ -400,6 +403,10 @@ cpx #160
 bne waittogo3
 
 jsr showcredits
-jsr waitglobal
+ldy #250 
+jsr global_delay
 jsr showcredits
-jsr waitglobal
+ldy #250
+jsr global_delay
+
+skipbigr:

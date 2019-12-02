@@ -15,7 +15,7 @@ Default-segment:
   $5100-$57bf Sprites
   $5800-$5fff CharSetMixed
   $6000-$7f3f Bitmap
-  $9200-$a955 Datablocks
-  $c000-$c85f Code
+  $8000-$88f2 Code
+  $9000-$a757 Datablocks
 
 Writing Symbol file: raat06invitro.sym

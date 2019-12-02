@@ -1,214 +1,288 @@
-intro:
+jsr init_sound
 
+intro:
+//jmp endintro            ///SKIP THIS PART
+
+jsr clearscreen
+jsr setc64screen
+
+ldx #4
+jsr blink1
+
+jsr copy_text01     //unity
+
+ldx #2
+jsr blink2
+
+jsr errortext
+
+ldx #2
+jsr blink3
+
+jsr copy_text02     //unreal
+
+ldx #2
+jsr blink4
+
+jsr errortext2
+
+ldx #2
+jsr blink5
+
+jsr copy_textpro
+
+ldx #2
+jsr blink6
+
+jsr copy_text03
+
+ldx #2
+jsr blink7
+
+jsr loading
+jsr loading
+jsr loading
+jsr loading
+jsr loading 
+
+jsr clearscreen
+jsr cleartextline
+
+jmp endintro
+//jmp intro
+
+copy_text01:
+    ldx #0
+cl1:
+    lda text01,x
+    sta $4400+6*40,x
+    cmp #$20
+    beq skpsnd1
+    ldy $ff
+    jsr global_delay
+    jsr sound
+skpsnd1:
+    inx
+    cpx #40
+    bne cl1
+    rts   
+
+
+copy_text02:
+    ldx #0
+cl2:
+    lda text02,x
+    sta $4400+11*40,x
+    cmp #$20
+    beq skpsnd2
+    ldy $ff
+    jsr global_delay
+    jsr sound
+skpsnd2:
+    inx
+    cpx #40
+    bne cl2
+    rts   
+
+copy_text03:
+    ldx #0
+cl3:
+    lda text03,x
+    sta $4400+19*40,x
+    cmp #$20
+    beq skpsnd3
+    ldy $ff
+    jsr global_delay
+    jsr sound
+skpsnd3:
+    inx
+    cpx #40
+    bne cl3
+    rts   
+
+copy_textpro:
+    ldx #0
+clp:
+    lda textpro,x
+    sta $4400+16*40,x
+    cmp #$20
+    beq skpsndp
+    ldy $ff
+    jsr global_delay
+    jsr sound
+skpsndp:
+    inx
+    cpx #80
+    bne clp
+    rts   
+
+errortext:
+    ldx #0
+cle1:
+    lda text04,x
+    sta $4400+9*40,x
+    inx
+    cpx #80
+    bne cle1
+    rts
+
+errortext2:
+    ldx #0
+cle2:
+    lda text04,x
+    sta $4400+14*40,x
+    inx
+    cpx #80
+    bne cle2
+    rts  
+
+blink1:
+
+    lda #$e0
+    sta $4400+6*40
+ldy #72
+jsr global_delay
+
+    lda #$20
+    sta $4400+6*40
+ldy #72
+jsr global_delay
+dex
+bne blink1
+rts
+
+blink2:
+    lda #$e0
+    sta $4409+6*40
+ldy #72
+jsr global_delay
+
+    lda #$20
+    sta $4409+6*40
+ldy #72
+jsr global_delay
+dex
+bne blink2
+rts 
+
+blink3:
+    lda #$e0
+    sta $4400+11*40
+ldy #72
+jsr global_delay
+
+    lda #$20
+    sta $4400+11*40
+ldy #72
+jsr global_delay
+dex
+bne blink3
+rts
+
+blink4:
+    lda #$e0
+    sta $441a+11*40
+ldy #72
+jsr global_delay
+
+    lda #$20
+    sta $441a+11*40
+ldy #72
+jsr global_delay
+dex
+bne blink4
+rts
+
+blink5:
+    lda #$e0
+    sta $4400+16*40
+ldy #72
+jsr global_delay
+
+    lda #$20
+    sta $4400+16*40
+ldy #72
+jsr global_delay
+dex
+bne blink5
+rts
+
+blink6:
+    lda #$e0
+    sta $4400+19*40
+ldy #72
+jsr global_delay
+
+    lda #$20
+    sta $4400+19*40
+ldy #72
+jsr global_delay
+dex
+bne blink6
+rts
+
+blink7:
+    lda #$e0
+    sta $4400+20*40
+ldy #72
+jsr global_delay
+
+    lda #$20
+    sta $4400+20*40
+ldy #72
+jsr global_delay
+dex
+bne blink7
+rts
+
+
+
+
+
+
+cur_delay:
+            ldx #$ff
+cd_loop:    dex
+            cpx #0
+            bne cd_loop
+            dey
+            cpy #0
+            bne cur_delay
+            rts
+
+
+
+setc64screen:
             ldx #0
 c64t_loop:    
-            lda c64taxt,x     ////ct_loop + 2 (low) - ct_loop + 1 (high)
-            sta $4400,x
+            lda c64text,x     
+            sta screen,x
             inx
-            cpx #206
+            cpx #206        /// Character count.
             bne c64t_loop
+            rts
 
-ldx #0
-lda #0
-ldy #0
-
-cursor_blink:
-            inx
-            cpx #4
-            beq start_taxt1
-            txa
-            pha
-            lda #$20
-            sta $44f0
-            ldy #$ff
-            ldx #0
-
-cursor_delay:   dex
-                bne cursor_delay
-                dey
-                bne cursor_delay
-            lda #$e0
-            sta $44f0
-
-            ldy #$ff
-            ldx #0
-
-cursor_delay2:   dex
-                bne cursor_delay2
-                dey
-                bne cursor_delay2
-            pla
-            tax
-            jmp cursor_blink
-
-start_taxt1:
-
-ldx #0
-jmp ct_loop
-
-beep:
-jsr sound
-
-            pla
-ct_loop:    
-            lda taxt1,x      ////ct_loop + 2 (low) - ct_loop + 1 (high)
-            sta $44f0,x
-            pha
-            inx
-            txa
-delay:
-            ldy #$aa
-            ldx #0
-d_loop:	
-            dex
-            bne d_loop
-            dey
-            bne d_loop
-            tax
-            cpx #4
-            bne beep
-
-start_taxt2:
-
-ldx #0
-jmp ct_loop2
-
-beep2:
-jsr sound
-
-            pla
-ct_loop2:    
-            lda taxt2,x      ////ct_loop + 2 (low) - ct_loop + 1 (high)
-            sta $44f4,x
-            pha
-            inx
-            txa
-delay2:
-            ldy #$bb
-            ldx #0
-d_loop2:	
-            dex
-            bne d_loop2
-            dey
-            bne d_loop2
-            tax
-            cpx #1
-            bne beep2
-
-start_taxt3:
-
-ldx #0
-jmp ct_loop3
+curpos:
+.byte 0
 
 
-beep3:
-jsr sound
+loading:
+		ldy #0
+		ldx #0
+loadloop:
+		dex
+		bne loadloop
+		sty brdColor
+		dey
+		bne loadloop
+		rts
 
-
-            pla
-ct_loop3:    
-            lda taxt3,x      ////ct_loop + 2 (low) - ct_loop + 1 (high)
-            sta $44f5,x
-            pha
-            inx
-            txa
-delay3:
-            ldy #$90
-            ldx #0
-d_loop3:	
-            dex
-            bne d_loop3
-            dey
-            bne d_loop3
-            tax
-            cpx #17
-            bne beep3
-
-start_taxt4:
-
-ldx #0
-jmp ct_loop4
-beep4:
-jsr sound
-
-
-            pla
-ct_loop4:    
-            lda taxt4,x      ////ct_loop + 2 (low) - ct_loop + 1 (high)
-            sta $4506,x
-            pha
-            inx
-            txa
-delay4:
-            ldy #$cc
-            ldx #0
-d_loop4:	
-            dex
-            bne d_loop4
-            dey
-            bne d_loop4
-            tax
-            cpx #1
-            bne beep4           
-
-
-start_taxt5:
-
-ldx #0
-jmp ct_loop5
-beep5:
-jsr sound
-            pla
-ct_loop5:    
-            lda taxt5,x      ////ct_loop + 2 (low) - ct_loop + 1 (high)
-            sta $4507,x
-            pha
-            inx
-            txa
-delay5:
-            ldy #$80
-            ldx #0
-d_loop5:	
-            dex
-            bne d_loop5
-            dey
-            bne d_loop5
-            tax
-            cpx #2
-            bne beep5
-
-            ldx #0
-cursor_blink_end:
-            inx
-            cpx #4
-            beq endintro
-            txa
-            pha
-            lda #$20
-            sta $4518
-            ldy #$ff
-            ldx #0
-
-cursor_delay_end:   dex
-                bne cursor_delay_end
-                dey
-                bne cursor_delay_end
-            lda #$e0
-            sta $4518
-
-            ldy #$ff
-            ldx #0
-
-cursor_delay2_end:   dex
-                bne cursor_delay2_end
-                dey
-                bne cursor_delay2_end
-            pla
-            tax
-            jmp cursor_blink_end
-
+cleartextline:
+        ldx #0
+        lda #$00
+cltxtloop: sta $4400+19*40,x
+        inx
+        bne cltxtloop
+		rts
 
 endintro:
-
-
-

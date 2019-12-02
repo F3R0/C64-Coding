@@ -38,7 +38,7 @@ video_dx9: Failed to prepare for rendering!
 Sound: Available sound devices: dx wmm dummy fs dump wav voc iff aiff mp3 flac ogg soundmovie
 Keyboard: Loading keymap `E:\Tools\WinVICE\C64\win_sym.vkm'.
 AUTOSTART: Autodetecting image type of `raat06invitro.prg'.
-Filesystem Image Probe: Error - Import GCR: Unknown GCR image version 57.
+Filesystem Image Probe: Error - Import GCR: Unknown GCR image version 50.
 Filesystem Image: Unknown disk image `raat06invitro.prg'.
 Tape: Error - Cannot open file `raat06invitro.prg'
 Error - CRT header invalid.
@@ -53,12 +53,8 @@ AUTOSTART: `raat06invitro.prg' recognized as program/p00 file.
 Main CPU: starting at ($FFFC).
 Main CPU: RESET.
 Drive 8: RESET.
-AUTOSTART: Injecting program data at $0801 (size $c05f)
+AUTOSTART: Injecting program data at $0801 (size $9f57)
 AUTOSTART: Ready
 AUTOSTART: Turning Warp mode off
 AUTOSTART: Starting program.
 AUTOSTART: Done.
-Writing configuration file `C:\Users\Fero\AppData\Roaming\vice\3.2\vice.ini'.
-
-Exiting...
-Sound: Closing device `dx'

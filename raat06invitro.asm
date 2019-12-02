@@ -10,24 +10,27 @@
 .const sprtPointer  = screen+$03f8
 .const charset		= $4000
 .const charsetm		= $5800
-.const datablocks	= $9200
+.const datablocks	= $9000
 .const music 		= $1000
 .const musicPlay 	= music+3
 .const color 		= $d800
 
-.const rasterPos0	= 250
-.const rasterPos1	= $ff
-.const rasterPos2	= 216
-.const rasterPos3	= $fa
 .const rasterPos4	= 0
+.const rasterPos0	= 250
+
+.const rasterPos1	= 0
+.const rasterPos2	= 216
+.const rasterPos3	= 250 /// border
+
 
 .const brdColor 	= $d020
 .const bgColor 		= $d021
 
-.const Start 		= $c000
+.const Start 		= $8000
 
 .label firstrow = screen + (22 * 40)
 .label secondrow = screen + (23 * 40)
+
 
 ///---------------------------------------///
 ///              Code Start               ///
@@ -59,7 +62,8 @@
 	BasicUpstart(Start)
 
 * = Start "Code"
- 
+
+
 		lda $dd00
         and #$FC	 ///	11111100
         ora #2       ///	00000010 - Bank1: $4000-$7fff
@@ -67,14 +71,8 @@
 
 		lda #%00010110	//Bitmap: $6000, Screen: $4400
 		sta $d018
-
+	
 #import "type.asm"
-
-jsr loading
-jsr loading
-jsr loading
-jsr loading
-jsr loading 
 
 		lda #$00
 		sta brdColor
@@ -86,12 +84,13 @@ jsr loading
 	sta $3fff	/// Clear ghost byte
 	sta $7fff
 
-jsr clearscreen
+
 jsr music	/// Initialize music @ $1000
 
 
 #import "bigr.asm"
 		
+	jsr image
 
 
 ///-----------------------------------------------------------///
@@ -125,8 +124,8 @@ jsr music	/// Initialize music @ $1000
 	ora #$20
 	sta $d011
 
-	lda #%00110101		/// no basic or kernal
-	sta $01
+/* 	lda #%00110101		/// no basic or kernal
+	sta $01 */
 
 	lda #rasterPos1
 	sta $d012
@@ -138,8 +137,7 @@ jsr music	/// Initialize music @ $1000
 
 	cli			/// re-enable interrupts
 
-		
-		jsr image
+	
 
 		lda #$00
 		sta brdColor
@@ -147,7 +145,6 @@ jsr music	/// Initialize music @ $1000
 
 		jsr initSprites
 		jsr stableSprites
-
 
 mainLoop:	
 	
@@ -170,7 +167,7 @@ irq01:
 		lsr $d019		/// ack RASTER IRQ
 
 
-		jsr colorCycle
+	
 		jsr spritemovey
 
 		lda #<irq02		/// prepare irq vector
@@ -275,7 +272,7 @@ irq03:
 		lda #>irq01
 		sta $ffff
 
-        
+        jsr colorCycle
 
 		lda #rasterPos1	/// set next irq raster position
 		sta $d012
@@ -301,6 +298,13 @@ irq03:
 
 		rti
 
+global_delay:
+        lda $d012
+        cmp #$80
+        bne global_delay
+        dey
+        bne global_delay
+        rts
 
 initSprites:
 
@@ -335,13 +339,7 @@ initSprites:
 	lda #%00000000
 	sta $d01d
 	sta $d017
-
-
-
-    
 rts
-
-
 
 image:
 
@@ -431,17 +429,6 @@ spritemovey:
 			sta $d02a
 			sta $d02b
 
-/* 	lda sinustable
-	sta sinustable+60
-
-	ldx #$00
-    clo:    
-	lda sinustable+1,x
-	sta sinustable,x
-
-	inx
-	cpx #60
-	bne clo */
 	rts
 
 
@@ -498,13 +485,6 @@ raat:
 
     dec textno
     rts
-
-
-    
-    
-    
-    
-
 
 scrollpixel:
 	lda stored016
@@ -570,38 +550,29 @@ delaym: dex
         sta textcount
         rts
 
-sound:
-
+init_sound:
 lda #$ff
 sta $d400+24 //volume max
 lda #54
 sta $d400+1 //hi byte freq voice 1
-lda #$05 //instant attack, a little decay
+lda #$05 //instant attack, a little decay //statik yerleri bölmeyi unutma
 sta $d400+5
+rts
+
+sound:
 lda #%10000000 // noise, gate close
 sta $d400+4 //voice 1 control register
 lda #%10000001 //noise, gate open
 sta $d400+4
-
 rts
 
-loading:
-		ldy #0
-		ldx #0
-loadloop:
-		dex
-		bne loadloop
-		sty brdColor
-		dey
-		bne loadloop
-		rts
-		
 
 clearscreen:  ldx #0
         lda #$20
 clearloop:   sta $4400,x
         sta $4500,x
         sta $4600,x
+		sta $46e8,x 
         inx
         bne clearloop
 		rts
@@ -712,7 +683,6 @@ colortable3:
         .byte 8,8,8,8
         .byte 2,2,2,2
 
-      
 colortable3end:
                
 
@@ -724,25 +694,6 @@ colortable4:
 		.byte $f,$f,$f
 		.byte $c,$c
 		.byte $b,$b
-
-logocolortab:
-		.byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-		.byte $f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f
-		.byte $c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c
-		.byte $b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b
-		.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-
-/* 
-		.byte 6,6
-		.byte $e,$e
-		.byte 3,3,3
-		.byte 1
-		.byte 1
-		.byte 1
-		.byte 3,3,3
-		.byte $e,$e
-		.byte 6,6
-		.byte 6,6 */
 
 colortable4end:
        
@@ -804,30 +755,49 @@ text:
 	.byte $ff
 
 
-taxt1:
-.text "LOAD"    ////f = $06 - screen koda cevirdi.
-taxt2:
-.text " "
-taxt3:
-.text @"\"SINUSTABLES.BIN\""
-taxt4:
-.text " "
-taxt5:
-.text ":P"
-
-
-c64taxt:
-///.text "                                            **** commodore 64 basic v2 ****                                              64k ram system  38911 basic bytes free                                         ready."  ////f = $06 - screen koda cevirdi.
-.text "                                            **** RAAT #06 : 28.12.2019 ****                                              RAATHQ - MAKEREVI, ISTANBUL / BEYOGLU                                          READY."  ////F = $06 - SCREEN KODA CEVIRDI.
-
-ydelay: 
+text01:
+.text "UNITY.EXE"
+.fill 31,$20    ////f = $06 - screen koda cevirdi.
 .byte 0
-ypos: 
-.byte $17 //always init with $17 for scroller
+
+text02:
+.text "UNREAL ENGINE LAUNCHER.EXE"
+.fill 14,$20
+.byte 0
+
+text03:
+.text "LOAD"
+.text @"\"SINUSTABLES.BIN\""
+.fill 3,$20
+.text ":P"
+.fill 24,$20
+.byte 0
+
+text04:
+.text "?SYNTAX  ERROR"
+.fill 26,$20
+.text "READY."
+.fill 34,$20
+.byte 0
+
+textpro:
+.text "OK... NWM..."
+.fill 28,$20
+.text "LET'S DO IT LIKE A PRO..."
+.fill 15,$20
+.byte 0
+
+c64text:
+.fill 44,$20
+.text "**** RAAT #06 : 28.12.2019 ****"
+.fill 46,$20
+.text "RAATHQ - MAKEREVI, ISTANBUL / BEYOGLU  "
+.fill 40,$20
+.text "READY."
+.byte 0
 
 
 message:
-
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
@@ -839,7 +809,7 @@ message:
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen asdasdas"
 
 
-//*=$c000
+
 creditstxt:
 .text @"  YOU ARE INVITED!  "
 .text @"  YOU ARE INVITED!  "
