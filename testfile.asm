@@ -15,17 +15,12 @@
 .const musicPlay 	= music+3
 .const color 		= $d800
 
-.const rasterPos4	= 0
 .const rasterPos0	= 250
-
+.const rasterPos4	= 0
 
 .const rasterPos1	= 0
-.const rasterPos2	= 216	///MY ORIGINALS
+.const rasterPos2	= 216
 .const rasterPos3	= 250
-
-/* .const rasterPos1	= 57
-.const rasterPos2	= 156
-.const rasterPos3	= 250 */
 
 
 .const brdColor 	= $d020
@@ -35,9 +30,6 @@
 
 .label firstrow = screen + (22 * 40)
 .label secondrow = screen + (23 * 40)
-.label deco_top = screen + (21 * 40)
-.label deco_bot = screen + (24 * 40)
-
 
 ///---------------------------------------///
 ///              Code Start               ///
@@ -69,17 +61,13 @@
 	BasicUpstart(Start)
 
 * = Start "Code"
-
-///-----------------------------------------------------------///
-///           		   Memory Management      	    		  ///
-///-----------------------------------------------------------///
-
-	lda $dd00
-    and #$FC	 ///	11111100
-    ora #2       ///	00000010 - Bank1: $4000-$7fff
-    sta $dd00
-	lda #%00010110	//Bitmap: $6000, Screen: $4400
-	sta $d018
+ 
+		lda $dd00
+        and #$FC	 ///	11111100
+        ora #2       ///	00000010 - Bank1: $4000-$7fff
+        sta $dd00
+		lda #%00010110	//Bitmap: $6000, Screen: $4400
+		sta $d018
 
 ///-----------------------------------------------------------///
 ///           		   Initialize Assets     	    		  ///
@@ -102,6 +90,16 @@
 ///						Prepare Raster IRQs					  ///
 ///-----------------------------------------------------------///
 
+
+		//				 Chrmem: $5800 */
+		
+
+
+///-----------------------------------------------------------///
+///           			Prepare Raster IRQs          		  ///
+///-----------------------------------------------------------///
+
+
 	sei
 
 
@@ -114,18 +112,18 @@
 	lda #>irq01
 	sta $ffff
 
-	cli			
+	cli	
+
 	jsr clearscreen
 	jsr image
-	jsr scrolldeco
 	jsr initSprites
 
 mainLoop:	
 	
-jsr toggletext
- jsr counttext
+    jsr toggletext
+    jsr counttext
 
-jmp mainLoop
+	jmp mainLoop
 
 
 irq01:
@@ -133,16 +131,15 @@ irq01:
 		stx irq01x
 		sty irq01y
 
-
-		lda #%00110000		//24 Rows
+		lda #%00111000		//25 Rows
 		sta $d011
 /* 		lda #%11011000		//40 Columns // Multicolor Mode
 		sta $d016 */
 
 		lsr $d019		/// ack RASTER IRQ
 
-	jsr spritemovey
-	jsr musicPlay
+		jsr spritemovey
+		jsr musicPlay
 
 lda #$00
 sta $d021
@@ -155,7 +152,8 @@ sta $d021
 		lda #rasterPos2	/// set next irq raster position
 		sta $d012
 
-	irq01a_p: lda #$00
+
+		irq01a_p: lda #$00
 		.label irq01a = irq01a_p+1
 
 		irq01x_p: ldx #$00
@@ -167,7 +165,9 @@ sta $d021
 		rti
 
 
+
 irq02:
+
     	sta irq02a
 		stx irq02x
 		sty irq02y      
@@ -178,7 +178,6 @@ irq02:
 
 /* 		lda #%11001000		//40 Columns // Multicolor Mode
 		sta $d016 */
-
 
 		lda #%00011000 // 25 Rows
 		sta $d011 
@@ -192,8 +191,9 @@ irq02:
 		lda #rasterPos3	/// set next irq raster position
 		sta $d012
 
-	
-jsr scrollpixel
+
+       jsr scrollpixel
+
 
 		irq02a_p: lda #$00
 
@@ -209,45 +209,47 @@ jsr scrollpixel
 
 
 irq03:
+
     	sta irq03a
 		stx irq03x
 		sty irq03y
 	
-	
-	ldx #$02
-	l1: dex
-	bne l1
 
-		lda #%00110011 // Text Mode // 24 Rows //changed to bmp mode
+		ldx #$02
+	l1: dex
+		bne l1
+
+		lda #%00010011 // Text Mode // 24 Rows
 		sta $d011
-		
-	ldx #$0b
+
+		ldx #$0b
 	l2: dex
 		bne l2
 
+
 		lda #%00011110
-		sta $d018	/// Bitmap #6000 // Charmem #7800 // OMASA NE OLUR??
+		sta $d018		 /// Bitmap #6000 // Charmem #7800 // OMASA NE OLUR??
 
 
 		lda #%11011000 // 40 Columns // Multicolor
 		sta $d016
 
-/* 	 	lda #%00011011 // Text Mode // 25 Rows
+	/*  	lda #%00011011 // Text Mode // 25 Rows
 		sta $d011 */
-		
 	
+        
 		lsr $d019		/// ack RASTER IRQ
 		lda #<irq01		/// prepare irq vector
 		sta $fffe
 		lda #>irq01
 		sta $ffff
 
+         jsr colorCycle
+        jsr scrollchr
 
-     jsr colorCycle
-     jsr scrollchr
-		  
 		lda #rasterPos1	/// set next irq raster position
 		sta $d012
+
 
 		irq03a_p: lda #$00
 		.label irq03a = irq03a_p+1
@@ -260,16 +262,10 @@ irq03:
 
 		rti
 
-global_delay:
-        lda $d012
-        cmp #$80
-        bne global_delay
-        dey
-        bne global_delay
-        rts
 
 initSprites:
 
+	
 	.for (var i = 0; i <= 7; i++)  // don't forget to change!!!!
 	{	
 	lda #324+i
@@ -301,7 +297,7 @@ initSprites:
 	sta $d01d
 	sta $d017
 
-/// Still Sprites
+    /// still sprites
 	lda #26
 	sta $d00b
 	sta $d00d
@@ -318,33 +314,37 @@ initSprites:
 
 rts
 
- image:
-			lda #$00
-    		ldx #$00
 
-	copy:   lda bitmapScr,x
-    		sta screen,x
+
+image:
+
+	lda #$00
+    ldx #$00
+
+	
+	copy:   lda bitmapScr ,x
+    		sta screen ,x
     		lda bitmapScr+$100,x
-    		sta screen+$100,x
+    		sta screen +$100,x
     		lda bitmapScr+$200,x
-    		sta screen+$200,x
+    		sta screen +$200,x
+			lda bitmapScr+$250,x
+    		sta screen +$250,x
+
+
     		lda bitmapCol ,x
-    		sta color,x
+    		sta color ,x
     		lda bitmapCol+$100,x
-    		sta color+$100,x
+    		sta color +$100,x
     		lda bitmapCol+$200,x
-    		sta color+$200,x
-    		inx
-			cpx #0
+    		sta color +$200,x
+			lda bitmapCol+$250,x
+    		sta color +$250,x
+    		dex
     		bne copy
-fixbot:		lda bitmapScr+$300,x
-    		sta screen+$300,x
-			lda bitmapCol+$300,x
-    		sta color+$300,x
-			inx
-			cpx #72
-			bne fixbot
-    		rts 
+    		rts
+
+
 
 colorCycle:
 	lda colorTable2
@@ -363,32 +363,66 @@ cl:
 	bne cl
 	rts
 
+stableSprites:
+			lda #26
+			sta $d00b
+			sta $d00d
+			sta $d00f
+
+			lda #62
+			sta $d00a
+			lda #$ce
+			sta $d00c
+
+			lda #226
+			sta $d00e
+
+			lda #11
+			sta $d02d
+			sta $d02e
 spritemovey:
+/* 
+			lda framecountery
+			cmp #255
+			bne movey
 
-	ldx framecountery
-	.for(var i=0; i<=8; i+=2) {
-	lda sinustable,x
-	adc #247
-	sta $d001+i
+			lda #0
+			sta framecountery */
+	movey:	ldx framecountery
+			.for(var i=0; i<=8; i+=2) {
+			lda sinustable,x
+			adc #247
+			sta $d001+i
+			inx
+			}
+	        inc framecountery
+			lda colortable,x
+	       	sta $d020
+			sta $d027
+			sta $d028
+			sta $d029
+			sta $d02a
+			sta $d02b
+
+/* 	lda sinustable
+	sta sinustable+60
+
+	ldx #$00
+    clo:    
+	lda sinustable+1,x
+	sta sinustable,x
+
 	inx
-	}
-	inc framecountery
-	lda colortable,x
-	sta $d020
-	sta $d027
-	sta $d028
-	sta $d029
-	sta $d02a
-	sta $d02b
-
+	cpx #60
+	bne clo */
 	rts
+
 
 toggletext:
 
     lda textno
     cmp #1
     beq raat
-
     .for (var i = 0; i <= 4; i++)  // don't forget to change!!!!
 	{	
 	lda #332+i
@@ -397,16 +431,24 @@ toggletext:
 
     lda #128
 	sta $d000
+
 	adc #27
     sta $d002
+
 	adc #25
     sta $d004
+
     adc #22
     sta $d006
+
     adc #23
     sta $d008
-    inc textno
 
+/* 	lda #%0011111		//sprite x/y stretch
+	sta $d01d
+	sta $d017 */
+
+    inc textno
     rts
 
 raat:
@@ -426,9 +468,16 @@ raat:
     sta $d006
     adc #$17
     sta $d008
-    dec textno
 
+    dec textno
     rts
+
+
+    
+    
+    
+    
+
 
 scrollpixel:
 	lda stored016
@@ -477,7 +526,7 @@ ct:	sta firstrow+39
 
 skip:
 
-rts
+	rts
 
 counttext:  
         lda textcount
@@ -494,7 +543,13 @@ delaym: dex
         sta textcount
         rts
 
-        ldx #$00
+global_delay:
+        lda $d012
+        cmp #$80
+        bne global_delay
+        dey
+        bne global_delay
+        rts
 
 
 init_sound:
@@ -502,67 +557,51 @@ lda #$ff
 sta $d400+24 //volume max
 lda #54
 sta $d400+1 //hi byte freq voice 1
-lda #$05 //ani attack, az decay
+lda #$05 //instant attack, a little decay
 sta $d400+5
-rts
 
 sound:
+
 lda #%10000000 // noise, gate close
 sta $d400+4 //voice 1 control register
 lda #%10000001 //noise, gate open
 sta $d400+4
+
 rts
 
 
-clearscreen: 
-			ldx #0
-        	lda #$20
+		
 
+clearscreen:  ldx #0
+        lda #$20
 clearloop:   sta $4400,x
-        	sta $4500,x
-        	sta $4600,x
-			sta $46e8,x 
-        	inx
-        	bne clearloop
-			rts
-
-
-
-scrolldeco:
-	ldx #0
-	lda #$00
-decoloop:
-	sta deco_top,x
-	sta deco_bot,x
-	inx
-	cpx #40
-	bne decoloop
-	rts
-
-	
-
+        sta $4500,x
+        sta $4600,x
+        inx
+        bne clearloop
+		rts
 
 *= datablocks "Datablocks"
 
-sinustable:
-.byte 4,3,2,1,1,1,1,1,2,2,3,4,5,6,7,7
-.byte 7,7,7,6,5,4,3,2,1,1,1,1,1,1,2,3
-.byte 4,5,6,7,7,7,7,7,6,6,5,3,2,2,1,1
-.byte 1,1,1,2,3,4,5,6,7,7,7,7,7,7,6,5
-.byte 4,3,2,1,1,1,1,1,2,3,4,5,6,6,7,7
-.byte 7,7,7,6,5,4,3,2,1,1,1,1,1,2,2,3
-.byte 4,5,6,7,7,7,7,7,6,5,4,3,2,1,1,1
-.byte 1,1,1,2,3,4,5,6,7,7,7,7,7,6,6,5
-.byte 3,2,2,1,1,1,1,1,2,3,4,5,6,7,7,7
-.byte 7,7,7,6,5,4,3,2,1,1,1,1,1,2,3,4
-.byte 5,6,6,7,7,7,7,7,6,5,4,3,2,1,1,1
-.byte 1,1,2,2,3,4,5,6,7,7,7,7,7,6,5,4
-.byte 3,2,1,1,1,1,1,1,2,3,4,5,6,7,7,7
-.byte 7,7,6,6,5,3,2,2,1,1,1,1,1,2,3,4
-.byte 5,6,7,7,7,7,7,7,6,5,4,3,2,1,1,1
-.byte 1,1,2,3,4,5,6,6,7,7,7,7,7,6,5,4
+	sinustable:
+		.byte 4,3,2,1,1,1,1,1,2,2,3,4,5,6,7,7
+		.byte 7,7,7,6,5,4,3,2,1,1,1,1,1,1,2,3
+		.byte 4,5,6,7,7,7,7,7,6,6,5,3,2,2,1,1
+		.byte 1,1,1,2,3,4,5,6,7,7,7,7,7,7,6,5
+		.byte 4,3,2,1,1,1,1,1,2,3,4,5,6,6,7,7
+		.byte 7,7,7,6,5,4,3,2,1,1,1,1,1,2,2,3
+		.byte 4,5,6,7,7,7,7,7,6,5,4,3,2,1,1,1
+		.byte 1,1,1,2,3,4,5,6,7,7,7,7,7,6,6,5
+		.byte 3,2,2,1,1,1,1,1,2,3,4,5,6,7,7,7
+		.byte 7,7,7,6,5,4,3,2,1,1,1,1,1,2,3,4
+		.byte 5,6,6,7,7,7,7,7,6,5,4,3,2,1,1,1
+		.byte 1,1,2,2,3,4,5,6,7,7,7,7,7,6,5,4
+		.byte 3,2,1,1,1,1,1,1,2,3,4,5,6,7,7,7
+		.byte 7,7,6,6,5,3,2,2,1,1,1,1,1,2,3,4
+		.byte 5,6,7,7,7,7,7,7,6,5,4,3,2,1,1,1
+		.byte 1,1,2,3,4,5,6,6,7,7,7,7,7,6,5,4
 
-sinx:
+	sinx:
 .byte 10,10,9,9,8,8,8,7,7,6,6,6,6,5,5,5
 .byte 5,5,4,4,4,4,4,4,4,5,5,5,5,5,5,6
 .byte 6,6,7,7,7,8,8,9,9,9,10,10,11,11,11,12
@@ -598,104 +637,147 @@ cosx:
 .byte 8,8,9,9,9,10,10,11,11,11,12,12,12,13,13,13
 .byte 13,13,13,13,13,13,13,13,12,12,12,12,11,11,10,10
 
-colortable:
-.byte 1,1,1,1,1,1,1,1,1
-.byte 7,7,15,15,12,12,11,11,11,1,1,2,2,2,9,9
-.byte 8,8,10,10,7,7,13,13,15,15
-.byte 1,1,1,1,1,1,1
-.byte 7,7,15,15,12,12
-.byte 11,11,11,1,1,6,6,6,4,4,14,14,3,3,15,15
 
-.byte 5,5,5,5,5,5,5,5,5
-.byte 7,7,15,15,12,12,11,11,11,1,1,2,2,2,9,9
-.byte 8,8,10,10,7,7,13,13,15,15
-.byte 5,5,5,5,5,5,5
-.byte 7,7,15,15,12,12
-.byte 11,11,11,1,1,6,6,6,4,4,14,14,3,3,15,15
+	colortable:
 
-.byte 3,3,3,3,3,3,3,3,3
-.byte 7,7,15,15,12,12,11,11,11,1,1,2,2,2,9,9
-.byte 8,8,10,10,7,7,13,13,15,15
-.byte 3,3,3,3,3,3,3
-.byte 7,7,15,15,12,12
-.byte 11,11,11,1,1,6,6,6,4,4,14,14,3,3,15,15
+		.byte 1,1,1,1,1,1,1,1,1
+		.byte 7,7,15,15,12,12,11,11,11,1,1,2,2,2,9,9
+		.byte 8,8,10,10,7,7,13,13,15,15
+		.byte 1,1,1,1,1,1,1
+		.byte 7,7,15,15,12,12
+		.byte 11,11,11,1,1,6,6,6,4,4,14,14,3,3,15,15
 
-.byte 7,7,7,7,7,7,7,7,7
-.byte 7,7,15,15,12,12,11,11,11,1,1,2,2,2,9,9
-.byte 8,8,10,10,7,7,13,13,15,15
-.byte 7,7,7,7,7,7,7
-.byte 7,7,15,15,12,12
-.byte 11,11,11,1,1,6,6,6,4,4,14,14,3,3,15,15
+		.byte 5,5,5,5,5,5,5,5,5
+		.byte 7,7,15,15,12,12,11,11,11,1,1,2,2,2,9,9
+		.byte 8,8,10,10,7,7,13,13,15,15
+		.byte 5,5,5,5,5,5,5
+		.byte 7,7,15,15,12,12
+		.byte 11,11,11,1,1,6,6,6,4,4,14,14,3,3,15,15
 
-colorTable2:
-.byte $0b,$0b,$0b,$0b,$0b,$0b,$0b,$0b
-.byte $0b,$0b,$0c,$0c,$0c,$0c,$0c,$0f
-.byte $0f,$03,$03,$07,$01,$01,$01,$01
-.byte $01,$07,$03,$03,$0c,$0c,$0b,$0b
-.byte $0b,$0b,$0b,$0b,$0b,$0b,$0b,$0b
+		.byte 3,3,3,3,3,3,3,3,3
+		.byte 7,7,15,15,12,12,11,11,11,1,1,2,2,2,9,9
+		.byte 8,8,10,10,7,7,13,13,15,15
+		.byte 3,3,3,3,3,3,3
+		.byte 7,7,15,15,12,12
+		.byte 11,11,11,1,1,6,6,6,4,4,14,14,3,3,15,15
 
-colortable3:  
-.byte 2,2,2,2
-.byte 8,8,8,8
-.byte $a,$a,$a,$a
-.byte 7,7,7,7
-.byte 7,7,7,7
-.byte $a,$a,$a,$a
-.byte 8,8,8,8
-.byte 2,2,2,2
+		.byte 7,7,7,7,7,7,7,7,7
+		.byte 7,7,15,15,12,12,11,11,11,1,1,2,2,2,9,9
+		.byte 8,8,10,10,7,7,13,13,15,15
+		.byte 7,7,7,7,7,7,7
+		.byte 7,7,15,15,12,12
+		.byte 11,11,11,1,1,6,6,6,4,4,14,14,3,3,15,15
+
+	colorTable2:
+
+		.byte $0b,$0b,$0b,$0b,$0b,$0b,$0b,$0b
+		.byte $0b,$0b,$0c,$0c,$0c,$0c,$0c,$0f
+		.byte $0f,$03,$03,$07,$01,$01,$01,$01
+		.byte $01,$07,$03,$03,$0c,$0c,$0b,$0b
+		.byte $0b,$0b,$0b,$0b,$0b,$0b,$0b,$0b
+
+colortable3:
+        
+		.byte 2,2,2,2
+        .byte 8,8,8,8
+		.byte $a,$a,$a,$a
+        .byte 7,7,7,7
+        .byte 7,7,7,7
+		.byte $a,$a,$a,$a
+        .byte 8,8,8,8
+        .byte 2,2,2,2
+
+      
+colortable3end:
+               
 
 colortable4:  
-.byte $b,$b
-.byte $c,$c
-.byte $f,$f,$f
-.byte 1,1
-.byte $f,$f,$f
-.byte $c,$c
-.byte $b,$b
+		.byte $b,$b
+		.byte $c,$c
+		.byte $f,$f,$f
+		.byte 1,1
+		.byte $f,$f,$f
+		.byte $c,$c
+		.byte $b,$b
 
+logocolortab:
+		.byte 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+		.byte $f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f,$f
+		.byte $c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c,$c
+		.byte $b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b,$b
+		.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
-framecountery:
-.byte 0
+/* 
+		.byte 6,6
+		.byte $e,$e
+		.byte 3,3,3
+		.byte 1
+		.byte 1
+		.byte 1
+		.byte 3,3,3
+		.byte $e,$e
+		.byte 6,6
+		.byte 6,6 */
+
+colortable4end:
+       
+
+	framecounterx:
+		.byte 0
+
+	framecounterx2:
+		.byte 0
+
+	framecountery:
+		.byte 0
+
+	spriteoffsettable:
+		.byte 0,20,40,60,80
+
+	spritecounter:
+		.byte 0
         
 stored016:
-.byte 0	
+	.byte 0	
 
 textno:	
-.byte 0
+	.byte 0
 
 textcount:	
-.byte 0
+	.byte 0
 
 text:
-.text "     $% retrojen presents $%     raat#06: 'the four horsemen of the apocalypse'     "
-.text "28/29 december 2019 - retrojen hq / karakoy / istanbul / turkey     "
-.text "the last meeting of 2019. organization: $% alcofribas $%     "
-.text "alcofribas on the keys... prepare yourself for quick seminars, demo talks, "
-.text "8 bit computers and consoles, surprize game contests, basic, assembler, c "
-.text "and even fpga workshops!     last, but not least... batman demo, vespertino "
-.text "teaser, pinball dreams, more batman demo. as you know, there is no such "
-.text "thing as an ugly girl, just not enough batman demo!      we are always seeking for fresh "
-.text "stuff.  don't forget to bring your code, pixelart, demo, intro, robe :), retro "
-.text "gear, joysticks, dinner, drinks and bed with you!      thanks for watching and " 
-.text "see you at the meeting!  $%   "
-.text "so... what about raat? what is raat?   people are shocked to discover that "
-.text @"raat is an abbreviation of \"retrojen akil adamlar toplantisi\" and it means "
-.text @"\"retrojen wise men meeting\". yes, it's that simple!      but... oh my dear! you "
-.text "come across a new, mysterious question now. "
-.text "$% what is retrojen? $% does this ring any bells for anyone? the scenerman "
-.text "always rings twice :):):)     retrojen is a retro computer focused "
-.text "group making annual meetings, forum & hardcopy fanzin. and now... the youtube "
-.text "channel is on the way! stay tuned for details!"
-.text "by the way, it called me awake to organise raat, to give thanks to our "
-.text "predecessor 7dx parties for their presence. without them we wouldn't have "
-.text "raat here today.     last, but not least :) thanks to our precious 3d & pixel-art "
-.text "guru f3r0 for this nice invitro, which is also his first scene release.     "
-.text " (i want to thank hydrogen for his help and a very big t"
-.text "are you still watching?      what are you waiting for???      $% the four horsemen are "
-.text "waiting for you at retrojen hq $%     take your backpack and come to visit us!"
+	.text "     $% retrojen presents $%     raat#06: 'the four horsemen of the apocalypse'     "
+	.text "28/29 december 2019 - retrojen headquarters / karakoy / istanbul / turkey     "
+	.text "the last meeting of 2019. organization: $% alcofribas $%     "
+	.text "alcofribas on the keys... prepare yourself for quick seminars, demo talks, "
+	.text "8 bit computers and consoles, surprize game contests, basic, assembler, c "
+	.text "and even fpga workshops!     last, but not least... batman demo, vespertino "
+	.text "teaser, pinball dreams, more batman demo. as you know, there is no such "
+	.text "thing as an ugly girl, just not enough batman demo!      we are always seeking for fresh "
+	.text "stuff. don't forget to bring your code, pixelart, demo, intro, $%robe$%, retro "
+	.text "gear, joysticks, dinner, drinks and bed with you!      thanks for watching and " 
+	.text "see you at the meeting! "
+	.text "so... what about raat? what is raat???      people are shocked to discover that "
+	.text "this kind of incredibly mysterious question has a non-mysterious answer. "
+	.text "as you may know, mystery is a property of questions, not answers.     "
+	.text "raat is an abbreviation of ''retrojen akil adamlar toplantisi''' and means "
+	.text "''retrojen wise men meeting''. yes, it's that simple.      but... oh my dear! you "
+	.text "come across a new, mysterious question now. what could it be?      yes, you're "
+	.text "right! what's retrojen? does this ring any bells for anyone? the scenerman "
+	.text "always rings twice :) :) :)     retrojen is a retro computer focused "
+	.text "group making annual meetings, forum & hardcopy fanzin. and now... the youtube "
+	.text "channel is on the way! stay tuned for details!"
+	.text "by the way, it called me awake to organise raat, to give thanks to our "
+	.text "predecessor 7dx parties for their presence. without them we wouldn't have "
+	.text "raat here today.     last, but not least :) thanks to our precious 3d & pixel-art "
+	.text "guru f3r0 for this nice invitro, which is also his first scene release.      "
+	.text "are you still watching?      what are you waiting for???      $% the four horsemen are "
+	.text "waiting for you at retrojen hq $%     take your backpack and come to visit us!"
 
-.fill 40,$20
-.byte $ff
+	.fill 40,$20
+	.byte $ff
+
 
 text01:
 .text "UNITY.EXE"
@@ -738,7 +820,10 @@ c64text:
 .text "READY."
 .byte 0
 
+
+
 message:
+
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
@@ -749,6 +834,8 @@ message:
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN"
 .text "Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen RETROJEN Retrojen asdasdas"
 
+
+//*=$c000
 creditstxt:
 .text @"  YOU ARE INVITED!  "
 .text @"  YOU ARE INVITED!  "

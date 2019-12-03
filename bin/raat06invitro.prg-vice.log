@@ -58,3 +58,7 @@ AUTOSTART: Ready
 AUTOSTART: Turning Warp mode off
 AUTOSTART: Starting program.
 AUTOSTART: Done.
+Writing configuration file `C:\Users\Fero\AppData\Roaming\vice\3.2\vice.ini'.
+
+Exiting...
+Sound: Closing device `dx'

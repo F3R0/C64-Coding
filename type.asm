@@ -1,7 +1,8 @@
-jsr init_sound
+
+///jmp endintro
 
 intro:
-//jmp endintro            ///SKIP THIS PART
+           ///SKIP THIS PART
 
 jsr clearscreen
 jsr setc64screen

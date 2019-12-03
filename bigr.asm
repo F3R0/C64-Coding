@@ -1,3 +1,10 @@
+
+
+lda #$00
+sta brdColor
+lda #$00
+sta bgColor	
+
 initSpritesIntro:
 	.for (var i = 0; i <= 7; i++)  // don't forget to change!!!!
 	{	
@@ -57,20 +64,18 @@ sta $d000
 ///            	Prepare Raster IRQs          		      ///
 ///-----------------------------------------------------------///
 
-      sei
+      sei               /// disable interrupts
       
-      lda #$7f
-      sta $dc0d
-      sta $dd0d
+   	lda #$7f		/// turn off the cia interrupts
+	sta $dc0d
+	sta $dd0d
+	and $d011
+	sta $d011
+	ldx #$01
+	stx $d01a
       
-      lda $d01a
-      ora #$01
-      sta $d01a
-      
-      lda $d011
-      and #$7f
-      sta $d011
-      
+
+        
         lda #%00110101		/// no basic or kernal
 	sta $01
 
@@ -82,12 +87,14 @@ sta $d000
 	lda #>irq00
 	sta $ffff
 
-    cli
+    cli         /// re-enable interrupts
+
+///jmp skipbigr  
+                          ///SKIP THIS PART
 jsr cleartoptxt
 jsr paintlogo
-
+  
 son:
-//jmp skipbigr                            ///SKIP THIS PART
 
 jsr showcredits
 jsr counttoleave
@@ -117,7 +124,7 @@ irq00:
 
 
 
-		ldx #$04
+		ldx #$05
 	rl1: dex
 		bne rl1
 
