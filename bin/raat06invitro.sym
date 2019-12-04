@@ -23,7 +23,7 @@
 .label irq02a_p=$862d
 .label text=$945c
 .label counttext=$888f
-.label textpro=$9c96
+.label textpro=$9ce4
 .label getchr=$886a
 .label clp=$80bd
 .label scrollchr=$8851
@@ -45,16 +45,16 @@
 .label clearloop=$88ca
 .label l1=$863f
 .label l2=$8649
-.label text04=$9c45
-.label text03=$9c12
+.label text04=$9c93
+.label text03=$9c5c
 .label skip=$888e
 .label colorTable2=$9400
 .label irq04y_p=$8348
-.label c64text=$9ce7
+.label c64text=$9d35
 .label irq01y_p=$8602
 .label irq04a_p=$8344
-.label text02=$9be9
-.label text01=$9bc0
+.label text02=$9c33
+.label text01=$9c0a
 .label copy=$8727
 .label skpsndp=$80cf
 .label textcount=$945b
@@ -138,7 +138,7 @@
 .label irq02x=$8630
 .label cl3=$80a3
 .label mirrorlogo=$84f5
-.label message=$9db6
+.label message=$9e04
 .label cycletext=$83e8
 .label dontreset=$8400
 .label irq03a=$866f
@@ -147,5 +147,5 @@
 .label irq02y_p=$8631
 .label copy_textpro=$80bb
 .label init_sound=$88ab
-.label creditstxt=$a0d7
+.label creditstxt=$a125
 .label cosx=$9200

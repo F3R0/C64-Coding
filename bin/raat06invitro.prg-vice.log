@@ -46,8 +46,8 @@ CART: 'raat06invitro.prg' is not a valid CRT file.
 AUTOSTART: Loading PRG file `raat06invitro.prg' with direct RAM injection.
 AUTOSTART: Resetting the machine to autostart '*'
 Drive 8: RESET.
-Sound: Opened device `dx', speed 44100Hz, fragment size 2.9ms, buffer size 101ms
-reSID: MOS8580, filter on, sampling rate 44100Hz - resampling, pass to 19845Hz
+Sound: Opened device `dx', speed 22050Hz, fragment size 2.9ms, buffer size 101ms
+reSID: MOS8580, filter on, sampling rate 22050Hz - resampling, pass to 9922Hz
 AUTOSTART: Turning Warp mode on
 AUTOSTART: `raat06invitro.prg' recognized as program/p00 file.
 Main CPU: starting at ($FFFC).

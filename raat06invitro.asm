@@ -667,32 +667,34 @@ textcount:
 .byte 0
 
 text:
-.text "     $% retrojen presents $%     raat#06: 'the four horsemen of the apocalypse'     "
-.text "28/29 december 2019 - retrojen hq / karakoy / istanbul / turkey     "
-.text "the last meeting of 2019. organization: $% alcofribas $%     "
+.text "     $% retrojen presents $%     raat#06: the four horsemen of the apocalypse   "
+.text "28/29 december 2019 - retrojen hq / karakoy / istanbul / turkey   "
+.text "the last meeting of 2019. organization: $% alcofribas $%   "
 .text "alcofribas on the keys... prepare yourself for quick seminars, demo talks, "
 .text "8 bit computers and consoles, surprize game contests, basic, assembler, c "
-.text "and even fpga workshops!     last, but not least... batman demo, vespertino "
+.text "and even fpga workshops! last, but not least... batman demo, vespertino "
 .text "teaser, pinball dreams, more batman demo. as you know, there is no such "
-.text "thing as an ugly girl, just not enough batman demo!      we are always seeking for fresh "
-.text "stuff.  don't forget to bring your code, pixelart, demo, intro, robe :), retro "
-.text "gear, joysticks, dinner, drinks and bed with you!      thanks for watching and " 
-.text "see you at the meeting!  $%   "
-.text "so... what about raat? what is raat?   people are shocked to discover that "
+.text "thing as an ugly girl, just not enough batman demo!   we are always seeking for fresh "
+.text "stuff. don't forget to bring your code, pixelart, demo, intro, robe :), retro "
+.text "gear, joysticks, dinner, drinks and bed with you! thanks for watching and " 
+.text "see you at the meeting! $%   "
+.text "so... what about raat? what is raat? people are shocked to discover that "
 .text @"raat is an abbreviation of \"retrojen akil adamlar toplantisi\" and it means "
-.text @"\"retrojen wise men meeting\". yes, it's that simple!      but... oh my dear! you "
+.text @"\"retrojen wise men meeting\". yes, it's that simple! but... oh my dear! you "
 .text "come across a new, mysterious question now. "
 .text "$% what is retrojen? $% does this ring any bells for anyone? the scenerman "
-.text "always rings twice :):):)     retrojen is a retro computer focused "
+.text "always rings twice :):):) retrojen is a retro computer focused "
 .text "group making annual meetings, forum & hardcopy fanzin. and now... the youtube "
 .text "channel is on the way! stay tuned for details!"
-.text "by the way, it called me awake to organise raat, to give thanks to our "
+.text " by the way, it called me awake to organise raat, to give thanks to our "
 .text "predecessor 7dx parties for their presence. without them we wouldn't have "
-.text "raat here today.     last, but not least :) thanks to our precious 3d & pixel-art "
-.text "guru f3r0 for this nice invitro, which is also his first scene release.     "
-.text " (i want to thank hydrogen for his help and a very big t"
-.text "are you still watching?      what are you waiting for???      $% the four horsemen are "
-.text "waiting for you at retrojen hq $%     take your backpack and come to visit us!"
+.text "raat here today. last, but not least :) thanks to our precious 3d & pixel-art "
+.text "guru f3r0 for this nice invitro, which is also his first intro experience.   "
+.text " (hey :) i want to thank #$ hydrogen #$ and #$ skate #$ for their precious help."
+.text " also, skate is the one who made it possible for me to code an invitro. he is a"
+.text " great mentor! -f3r0)   "
+.text "are you still watching? what are you waiting for??? the four horsemen are "
+.text "waiting for you at retrojen hq! take your backpack and come to visit us! "
 
 .fill 40,$20
 .byte $ff
@@ -709,10 +711,10 @@ text02:
 
 text03:
 .text "LOAD"
-.text @"\"SINUSTABLES.BIN\""
-.fill 3,$20
-.text ":P"
-.fill 24,$20
+.text @"\"CODE-LOTS-OF-CODE\""
+.fill 4,$20
+.text ":)"
+.fill 25,$20
 .byte 0
 
 text04:
@@ -725,8 +727,8 @@ text04:
 textpro:
 .text "OK... NWM..."
 .fill 28,$20
-.text "LET'S DO IT LIKE A PRO..."
-.fill 15,$20
+.text "LET'S DO IT LIKE A SCENER..."
+.fill 12,$20
 .byte 0
 
 c64text:
