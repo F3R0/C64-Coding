@@ -667,14 +667,14 @@ textcount:
 .byte 0
 
 text:
-.text "     $% retrojen presents $%     raat#06: the four horsemen of the apocalypse   "
-.text "28/29 december 2019 - retrojen hq / karakoy / istanbul / turkey   "
-.text "the last meeting of 2019. organization: $% alcofribas $%   "
+.text "     $% retrojen presents $%    $% raat#06: the four horsemen of the apocalypse $% "
+.text "28/29 december 2019 - retrojen hq / karakoy / istanbul / turkey "
+.text "the last meeting of 2019! organization: <=> alcofribas <=>   "
 .text "alcofribas on the keys... prepare yourself for quick seminars, demo talks, "
-.text "8 bit computers and consoles, surprize game contests, basic, assembler, c "
-.text "and even fpga workshops! last, but not least... batman demo, vespertino "
-.text "teaser, pinball dreams, more batman demo. as you know, there is no such "
-.text "thing as an ugly girl, just not enough batman demo!   we are always seeking for fresh "
+.text "8bit computers and consoles, surprize game contests, basic, assembler, c "
+.text "and even fpga workshops! last, but not least... <=> batman <=> demo, vespertino "
+.text "teaser, pinball dreams, more <=> batman <=> demo. as you know, there is no such "
+.text "thing as an ugly girl, just not enough <=> batman <=> demo! we are always seeking for fresh "
 .text "stuff. don't forget to bring your code, pixelart, demo, intro, robe :), retro "
 .text "gear, joysticks, dinner, drinks and bed with you! thanks for watching and " 
 .text "see you at the meeting! $%   "
@@ -690,11 +690,11 @@ text:
 .text "predecessor 7dx parties for their presence. without them we wouldn't have "
 .text "raat here today. last, but not least :) thanks to our precious 3d & pixel-art "
 .text "guru f3r0 for this nice invitro, which is also his first intro experience.   "
-.text " (hey :) i want to thank #$ hydrogen #$ and #$ skate #$ for their precious help."
-.text " also, skate is the one who made it possible for me to code an invitro. he is a"
+.text " (hey :) i want to thank hydrogen and skate for their precious help."
+.text " also, skate is the one who made it possible for me to code an invitro cuz he is a"
 .text " great mentor! -f3r0)   "
 .text "are you still watching? what are you waiting for??? the four horsemen are "
-.text "waiting for you at retrojen hq! take your backpack and come to visit us! "
+.text "waiting for you at retrojen hq! take your backpack and come to visit us!     $%$%$%$%    "
 
 .fill 40,$20
 .byte $ff

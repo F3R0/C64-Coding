@@ -46,8 +46,8 @@ CART: 'raat06invitro.prg' is not a valid CRT file.
 AUTOSTART: Loading PRG file `raat06invitro.prg' with direct RAM injection.
 AUTOSTART: Resetting the machine to autostart '*'
 Drive 8: RESET.
-Sound: Opened device `dx', speed 22050Hz, fragment size 2.9ms, buffer size 101ms
-reSID: MOS8580, filter on, sampling rate 22050Hz - resampling, pass to 9922Hz
+Sound: Opened device `dx', speed 44100Hz, fragment size 2.9ms, buffer size 101ms
+reSID: MOS8580, filter on, sampling rate 44100Hz - resampling, pass to 19845Hz
 AUTOSTART: Turning Warp mode on
 AUTOSTART: `raat06invitro.prg' recognized as program/p00 file.
 Main CPU: starting at ($FFFC).
@@ -58,6 +58,21 @@ AUTOSTART: Ready
 AUTOSTART: Turning Warp mode off
 AUTOSTART: Starting program.
 AUTOSTART: Done.
+Detecting PCI CatWeasel boards.
+No PCI CatWeasel found.
+Detecting PCI CatWeasel boards.
+Cannot open winio32.dll, trying direct PCI I/O access.
+Cannot use direct PCI I/O access on Windows NT/2000/Server/XP/Vista/7/8/10.
+Detecting dll assisted PardSIDs.
+Cannot open inpout32.dll.
+Detecting direct I/O PardSIDs.
+Cannot use direct I/O on Windows NT/2000/Server/XP/Vista/7/8/10.
+Detecting ISA SSI2001 boards.
+Cannot open inpout32.dll, trying direct ISA I/O access.
+Cannot use direct I/O access on Windows NT/2000/Server/XP/Vista/7/8/10.
+Sound: Closing device `dx'
+Sound: Opened device `dx', speed 44100Hz, fragment size 2.9ms, buffer size 101ms
+reSID: MOS6581, filter on, sampling rate 44100Hz - resampling, pass to 19845Hz
 Writing configuration file `C:\Users\Fero\AppData\Roaming\vice\3.2\vice.ini'.
 
 Exiting...
